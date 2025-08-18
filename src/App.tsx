@@ -15,17 +15,17 @@ export default function App() {
   const { isDarkMode, toggleDarkMode } = useThemeStore();
 
   useEffect(() => {
-    // Apply theme class to document
+    // 仅使用 data-theme 控制变量，移除 .dark class 依赖
     if (isDarkMode) {
-      document.documentElement.classList.add('dark');
+      document.documentElement.setAttribute('data-theme', 'dark');
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.setAttribute('data-theme', 'light');
     }
   }, [isDarkMode]);
 
   return (
     <Router>
-      <div className={`min-h-screen ${isDarkMode ? 'dark' : ''}`}>
+      <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
         <Navigation isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
         <Routes>
           <Route path="/" element={<Home />} />

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horus - AI驱动的跨境合规资讯平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #0c1f4c 0%, #1e40af 100%);
+        }
+        .header-transparent {
+            background-color: transparent;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .header-solid {
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: background-color 0.3s ease-in-out;
+        }
+        .news-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .filter-checkbox:checked + label { color: #1e40af; font-weight: 600; }
+        .top-nav-tab.active { border-bottom-color: #1e40af; color: #1e40af; font-weight: 700; }
+        .top-nav-tab { border-bottom-color: transparent; }
+        .gemini-modal-backdrop { background-color: rgba(0, 0, 0, 0.5); }
+        .loader { border-top-color: #3498db; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .gemini-btn { background-color: #eef2ff; color: #4338ca; }
+        .gemini-btn:hover { background-color: #e0e7ff; }
+        .fade-in-up { animation: fadeInUp 1s ease-out forwards; opacity: 0; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-600 { animation-delay: 0.6s; }
+    </style>
+    <!-- Chosen Palette: Professional Blue & Gold. A base of light gray (#f8f9fa) and white for a clean, professional feel. Deep blue (#1e3a8a, #1e40af) for primary actions, navigation, and text to convey trust and authority. A subtle gold/amber (#f59e0b) for accents and call-to-action buttons, referencing the Egyptian theme of Horus. -->
+    <!-- Application Structure Plan: The application leads with a full-screen "Hero" section to establish brand identity and core value proposition. This is followed by structured sections for Problem, Solution (Features), Team, and a final CTA, creating a complete landing page experience. A clear call-to-action button smoothly scrolls the user down to the main application dashboard, which retains its proven, effective layout. This two-part structure (Landing Page + Dashboard SPA) is a standard and highly usable pattern for modern web applications. -->
+    <!-- Visualization & Content Choices: The homepage uses structured HTML/CSS sections with icons (Unicode) to explain problems and features. The Team section uses cards to present members. The core application uses a "News Card" list. Goal: Inform & Organize. Method: Each card is a structured HTML element presenting key information. Interaction: Users can click a link to view the original source or use Gemini features. Justification: This is the most direct and efficient way to present a feed of textual information for legal professionals. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div id="app" class="min-h-screen">
+        <!-- Universal Header -->
+        <header id="main-header" class="header-transparent fixed top-0 w-full z-50 h-20 flex items-center">
+             <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center">
+                <a href="#home-hero" class="flex items-center space-x-2">
+                    <span id="header-logo-text" class="text-2xl font-bold text-white transition-colors duration-300">✨ Horus</span>
+                </a>
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="#features" class="header-nav-link text-white font-medium hover:text-gray-200 transition-colors">核心功能</a>
+                    <a href="#team" class="header-nav-link text-white font-medium hover:text-gray-200 transition-colors">专家团队</a>
+                    <a href="#custom-services" class="header-nav-link text-white font-medium hover:text-gray-200 transition-colors">定制服务</a>
+                </nav>
+                <a href="#news-platform" class="bg-white text-blue-800 font-bold py-2 px-5 rounded-full hover:bg-gray-200 transition-all transform hover:scale-105">
+                    进入平台
+                </a>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section id="home-hero" class="hero-section h-screen flex flex-col items-center justify-center text-white text-center p-4 pt-20">
+            <div class="fade-in-up">
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight">Horus AI</h1>
+                <p class="text-xl md:text-2xl text-blue-200 mt-2">AI Legal RegTech</p>
+            </div>
+            <p class="fade-in-up delay-200 max-w-2xl text-lg md:text-xl text-blue-100 mt-6">
+                AI-Powered Legal Compliance News & Analysis
+            </p>
+            <a href="#news-platform" class="fade-in-up delay-400 mt-10 bg-white text-blue-800 font-bold py-3 px-8 rounded-full text-lg hover:bg-gray-200 transition-all transform hover:scale-105">
+                开始探索
+            </a>
+        </section>
+
+        <!-- Problem Section -->
+        <section id="problem" class="py-20 bg-white">
+            <div class="container mx-auto px-4 lg:px-8 text-center">
+                <h2 class="text-4xl font-bold text-blue-900 mb-4">您是否正被合规资讯的海洋淹没？</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-12">跨境合规律师与法务团队每日面临着巨大的信息处理压力，传统工作模式已难以为继。</p>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="text-center p-4">
+                        <div class="text-5xl mb-4">🕒</div>
+                        <h3 class="text-xl font-bold text-blue-800 mb-2">信息延迟</h3>
+                        <p class="text-gray-600">关键动态滞后于客户，错失最佳应对时机。</p>
+                    </div>
+                    <div class="text-center p-4">
+                        <div class="text-5xl mb-4">⏳</div>
+                        <h3 class="text-xl font-bold text-blue-800 mb-2">时间黑洞</h3>
+                        <p class="text-gray-600">日均耗时2.7小时，进行大量重复性信息搜集。</p>
+                    </div>
+                    <div class="text-center p-4">
+                        <div class="text-5xl mb-4">⚙️</div>
+                        <h3 class="text-xl font-bold text-blue-800 mb-2">流程低效</h3>
+                        <p class="text-gray-600">手动巡查近百信源，繁琐、枯燥且易出错。</p>
+                    </div>
+                    <div class="text-center p-4">
+                        <div class="text-5xl mb-4">🎯</div>
+                        <h3 class="text-xl font-bold text-blue-800 mb-2">需求错配</h3>
+                        <p class="text-gray-600">通用资讯无法满足不同企业的个性化需求。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-4 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-4xl font-bold text-blue-900 mb-4">Horus 解决方案：您的AI合规大脑</h2>
+                    <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-16">我们将AI深度融入合规工作流，将信息转化为您的战略优势。</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <div class="text-3xl text-blue-800 mb-4">📡</div>
+                        <h3 class="text-2xl font-bold mb-3">全球实时监测</h3>
+                        <p>7x24小时不间断监控全球近百个监管机构与新闻网站，确保您在第一时间掌握动态。</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <div class="text-3xl text-blue-800 mb-4">🧠</div>
+                        <h3 class="text-2xl font-bold mb-3">AI智能处理</h3>
+                        <p>自动化清洗、过滤、分类并生成专业摘要，将杂乱信息转化为结构化情报。</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <div class="text-3xl text-blue-800 mb-4">✨</div>
+                        <h3 class="text-2xl font-bold mb-3">Gemini 深度赋能</h3>
+                        <p>一键获取专业解读、生成邮件初稿，将信息理解与内容创作的效率提升至全新高度。</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <div class="text-3xl text-blue-800 mb-4">📊</div>
+                        <h3 class="text-2xl font-bold mb-3">多维精准筛选</h3>
+                        <p>按机构、专业领域、行业等多维度交叉筛选，瞬间定位您最需要的情报。</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <div class="text-3xl text-blue-800 mb-4">🚀</div>
+                        <h3 class="text-2xl font-bold mb-3">“千企千面”定制</h3>
+                        <p>为您的不同客户配置专属分析引擎，提供真正个性化、高相关性的合规洞察。</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-md">
+                        <div class="text-3xl text-blue-800 mb-4">📚</div>
+                        <h3 class="text-2xl font-bold mb-3">动态知识库</h3>
+                        <p>所有情报自动沉淀为结构化知识库，成为您团队最宝贵的数字资产。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Team Section -->
+        <section id="team" class="py-20 bg-white">
+            <div class="container mx-auto px-4 lg:px-8 text-center">
+                <h2 class="text-4xl font-bold text-blue-900 mb-4">Horus Multi-Agent 专家团队</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-12">我们的AI由顶尖的虚拟专家团队驱动，为您提供多维度的专业支持。</p>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+                    <div class="text-center">
+                        <img src="https://placehold.co/200x200/0c1f4c/ffffff?text=H" alt="Harvey" class="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg">
+                        <h3 class="text-xl font-bold">Harvey</h3>
+                        <p class="text-gray-500">首席合规官</p>
+                    </div>
+                    <div class="text-center">
+                        <img src="https://placehold.co/200x200/1e3a8a/ffffff?text=K" alt="Kevin" class="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg">
+                        <h3 class="text-xl font-bold">Kevin</h3>
+                        <p class="text-gray-500">出口管制专家</p>
+                    </div>
+                    <div class="text-center">
+                        <img src="https://placehold.co/200x200/3b82f6/ffffff?text=R" alt="Ruby" class="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg">
+                        <h3 class="text-xl font-bold">Ruby</h3>
+                        <p class="text-gray-500">数据合规专家</p>
+                    </div>
+                    <div class="text-center">
+                        <img src="https://placehold.co/200x200/60a5fa/ffffff?text=U" alt="Urban" class="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg">
+                        <h3 class="text-xl font-bold">Urban</h3>
+                        <p class="text-gray-500">人工智能专家</p>
+                    </div>
+                    <div class="text-center">
+                        <img src="https://placehold.co/200x200/93c5fd/000000?text=S" alt="Sophia" class="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg">
+                        <h3 class="text-xl font-bold">Sophia</h3>
+                        <p class="text-gray-500">贸易救济专家</p>
+                    </div>
+                    <div class="text-center">
+                        <img src="https://placehold.co/200x200/bfdbfe/000000?text=O" alt="Owen" class="w-32 h-32 rounded-full mx-auto mb-4 shadow-lg">
+                        <h3 class="text-xl font-bold">Owen</h3>
+                        <p class="text-gray-500">行业分析专家</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Application Platform -->
+        <div id="news-platform" class="pt-20">
+            <!-- Header / Top Navigation -->
+            <header class="bg-white shadow-md sticky top-20 z-30 h-20 flex items-center">
+                <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center">
+                    <div class="flex items-center space-x-8">
+                        <nav class="flex items-center space-x-1 h-20">
+                            <button data-category="中国管制/制裁" class="top-nav-tab text-gray-600 hover:text-blue-900 px-4 py-2 text-lg font-medium border-b-4 transition-all duration-200 h-full flex items-center active">中国管制/制裁</button>
+                            <button data-category="外国管制/制裁" class="top-nav-tab text-gray-600 hover:text-blue-900 px-4 py-2 text-lg font-medium border-b-4 transition-all duration-200 h-full flex items-center">外国管制/制裁</button>
+                            <button data-category="数据/AI合规" class="top-nav-tab text-gray-600 hover:text-blue-900 px-4 py-2 text-lg font-medium border-b-4 transition-all duration-200 h-full flex items-center">数据/AI合规</button>
+                            <button data-category="外媒报道" class="top-nav-tab text-gray-600 hover:text-blue-900 px-4 py-2 text-lg font-medium border-b-4 transition-all duration-200 h-full flex items-center">外媒报道</button>
+                        </nav>
+                    </div>
+                    <div class="relative hidden lg:block">
+                        <input id="search-input" type="text" placeholder="在当前分类下搜索..." class="w-64 pl-4 pr-10 py-2 border rounded-full bg-gray-100 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-800 transition-all">
+                        <svg class="w-5 h-5 text-gray-400 absolute top-1/2 right-4 -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="container mx-auto px-4 lg:px-8 pt-6">
+                <div class="flex flex-col lg:flex-row">
+                    <!-- Left Sidebar for Filters -->
+                    <aside id="filter-sidebar" class="w-full lg:w-1/4 lg:pr-8 mb-6 lg:mb-0">
+                        <div class="bg-white p-6 rounded-xl shadow-sm sticky top-44">
+                            <h3 class="text-xl font-bold mb-4 text-blue-900">筛选条件</h3>
+                            <div id="filters-container"></div>
+                            <div class="mt-6 flex space-x-2">
+                                <button id="apply-filters" class="w-full bg-blue-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-900 transition-all">应用筛选</button>
+                                <button id="reset-filters" class="w-full bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-300 transition-all">重置</button>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Right Content Area for News -->
+                    <div id="news-content" class="w-full lg:w-3/4">
+                        <div id="news-list" class="space-y-6"></div>
+                        <div id="no-results" class="hidden text-center py-20">
+                            <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <h3 class="mt-2 text-lg font-medium text-gray-900">未找到相关资讯</h3>
+                            <p class="mt-1 text-base text-gray-500">请尝试调整您的筛选条件或搜索关键词。</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Other Sections -->
+        <section id="custom-services" class="py-20 bg-white mt-16">
+            <div class="container mx-auto px-4 lg:px-8 text-center">
+                 <h2 class="text-4xl font-bold text-blue-900 mb-4">企业深度定制服务</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-12">我们理解每个企业的合规需求都是独特的。Horus提供“千企千面”的深度定制服务，将AI洞察力与您的业务深度融合，为您打造专属的合规官。</p>
+                <div class="grid md:grid-cols-3 gap-8 text-left">
+                    <div class="bg-gray-50 p-8 rounded-xl"><h3 class="text-2xl font-bold text-blue-800 mb-3">定制化简报</h3><p class="text-gray-600">根据您的行业、关注领域和内部话术习惯，生成高度定制化的日报、周报，直达关键决策者邮箱。</p></div>
+                    <div class="bg-gray-50 p-8 rounded-xl"><h3 class="text-2xl font-bold text-blue-800 mb-3">专属风险预警</h3><p class="text-gray-600">主动监测与您业务、客户、供应链相关的负面动态，第一时间发出预警，帮助您快速响应，规避风险。</p></div>
+                    <div class="bg-gray-50 p-8 rounded-xl"><h3 class="text-2xl font-bold text-blue-800 mb-3">合规报告与培训</h3><p class="text-gray-600">直接输出符合您集团文件格式习惯的合规文件初稿，或为您的团队提供基于最新动态的内部培训材料。</p></div>
+                </div>
+                <div class="mt-12">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">与我们联系，开启您的专属合规之旅</h3>
+                    <form class="max-w-xl mx-auto space-y-4"><div class="grid sm:grid-cols-2 gap-4"><input type="text" placeholder="您的姓名" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800"><input type="text" placeholder="公司名称" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800"></div><input type="email" placeholder="联系邮箱" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800"><textarea placeholder="您的需求简述..." rows="4" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-800"></textarea><button type="submit" class="w-full bg-amber-500 text-white font-bold py-3 px-6 rounded-full hover:bg-amber-600 transition-all text-lg">提交需求</button></form>
+                </div>
+            </div>
+        </section>
+        <section id="about-us" class="py-20 bg-blue-900 text-white"><div class="container mx-auto px-4 lg:px-8 text-center"><h2 class="text-4xl font-bold mb-4">关于Horus</h2><p class="max-w-3xl mx-auto text-lg text-blue-200">Horus，源自古埃及的守护与洞察之神。我们的使命是将法律专业人士从繁琐的信息收集中解放出来，通过最前沿的AI技术，提供精准、高效、深度的合规洞察。我们相信，技术不应取代专家，而应成为专家最强大的羽翼，助其洞察先机，守护价值。</p></div></section>
+        <footer class="bg-gray-800 text-gray-400 py-6"><div class="container mx-auto px-4 lg:px-8 text-center"><p>&copy; 2025 Horus. All Rights Reserved. 科技驱动法律，专业引领未来。</p></div></footer>
+
+        <!-- Gemini Modal -->
+        <div id="gemini-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 gemini-modal-backdrop hidden">
+            <div id="modal-content" class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col">
+                <div class="flex justify-between items-center p-4 border-b">
+                    <h3 id="modal-title" class="text-xl font-bold text-blue-900"></h3>
+                    <button id="modal-close-btn" class="text-gray-400 hover:text-gray-800 text-3xl font-bold">&times;</button>
+                </div>
+                <div id="modal-body" class="p-6 overflow-y-auto">
+                    <div id="modal-loader" class="flex justify-center items-center py-10">
+                        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+                    </div>
+                    <div id="modal-result" class="text-gray-700 leading-relaxed whitespace-pre-wrap"></div>
+                </div>
+                <div id="modal-footer" class="p-4 border-t flex justify-end hidden">
+                    <button id="copy-btn" class="bg-blue-800 text-white font-bold py-2 px-5 rounded-lg hover:bg-blue-900 transition-all">复制到剪贴板</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Header scroll effect
+            const header = document.getElementById('main-header');
+            const logoText = document.getElementById('header-logo-text');
+            const navLinks = document.querySelectorAll('.header-nav-link');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.remove('header-transparent');
+                    header.classList.add('header-solid');
+                    logoText.classList.remove('text-white');
+                    logoText.classList.add('text-blue-900');
+                    navLinks.forEach(link => {
+                        link.classList.remove('text-white', 'hover:text-gray-200');
+                        link.classList.add('text-gray-600', 'hover:text-blue-900');
+                    });
+                } else {
+                    header.classList.remove('header-solid');
+                    header.classList.add('header-transparent');
+                    logoText.classList.remove('text-blue-900');
+                    logoText.classList.add('text-white');
+                    navLinks.forEach(link => {
+                        link.classList.remove('text-gray-600', 'hover:text-blue-900');
+                        link.classList.add('text-white', 'hover:text-gray-200');
+                    });
+                }
+            });
+
+            const mockNewsData = [
+                { id: 1, category: '中国管制/制裁', title: '商务部发布关于对部分无人机实施临时出口管制的公告', date: '2025-08-12', source: '商务部', author: 'Kevin', domain: '出口管制', industry: '高科技', summary: '为维护国家安全和利益，决定对特定性能的无人驾驶航空飞行器和相关物项实施临时出口管制。', link: '#' },
+                { id: 2, category: '中国管制/制裁', title: '外交部宣布对美国一家军工企业采取反制措施', date: '2025-08-11', source: '外交部', author: 'Kevin', domain: '经济制裁', industry: '制造业', summary: '针对美方向中国台湾地区出售武器，中方决定对一家长期参与售台武器的美国军工企业实施制裁。', link: '#' },
+                { id: 3, category: '外国管制/制裁', title: '美国BIS将多家中国实体列入“实体清单”', date: '2025-08-10', source: '美国商务部工业与安全局(BIS)', author: 'Kevin', domain: '出口管制', industry: '芯片', summary: '美国商务部工业与安全局（BIS）宣布，出于国家安全考虑，将多家中国科技公司列入实体清单。', link: '#' },
+                { id: 4, category: '数据/AI合规', title: '国家网信办发布《生成式人工智能服务管理暂行办法》', date: '2025-08-09', source: '国家互联网信息办公室', author: 'Urban', domain: '人工智能合规', industry: '互联网', summary: '办法旨在促进生成式人工智能健康发展和规范应用，明确了服务提供者的责任与义务。', link: '#' },
+                { id: 5, category: '外媒报道', title: 'The Hill: Lawmakers push for stricter regulations on AI-powered financial advice', date: '2025-08-12', source: 'The Hill', author: 'Sophia', domain: '人工智能合规', industry: '金融/保险', summary: 'A bipartisan group of senators introduced a bill aiming to establish a clear regulatory framework for AI systems providing financial advice to consumers.', link: '#' },
+                { id: 6, category: '外国管制/制裁', title: '欧盟更新对俄罗斯的经济制裁方案，涉及能源领域', date: '2025-08-08', source: '欧盟委员会', author: 'Kevin', domain: '经济制裁', industry: '能源/光伏', summary: '欧盟理事会通过了第12轮对俄经济制裁，重点针对俄罗斯的液化天然气（LNG）转运服务。', link: '#' },
+                { id: 7, category: '数据/AI合规', title: '加州通过消费者隐私权法案(CPRA)新修正案', date: '2025-08-07', source: '加州隐私保护局(CPPA)', author: 'Ruby', domain: '数据合规', industry: '互联网', summary: '新修正案加强了对消费者敏感个人信息的保护，并对企业的数据处理活动提出了更严格的要求。', link: '#' },
+                { id: 8, category: '中国管制/制裁', title: '国务院关税税则委员会发布对美加征关税商品排除延期清单', date: '2025-08-05', source: '国务院关税税则委员会', author: 'Sophia', domain: '经济制裁', industry: '消费品', summary: '对《对美加征关税商品第十次排除延期清单》中的相关商品，延长排除期限。', link: '#' },
+                { id: 9, category: '外媒报道', title: 'Dow Jones: Global supply chains brace for impact of new port automation standards', date: '2025-08-11', source: 'Dow Jones', author: 'Owen', domain: '供应链合规', industry: '物流港口', summary: 'International maritime organizations have agreed on new automation and data exchange standards for major ports, aiming to improve efficiency but requiring significant investment from operators.', link: '#' },
+                { id: 10, category: '外国管制/制裁', title: '英国更新其自主金融制裁名单', date: '2025-08-09', source: '英国财政部', author: 'Kevin', domain: '经济制裁', industry: '金融/保险', summary: '英国财政部金融制裁执行办公室（OFSI）更新了其综合制裁名单，增加了一些个人和实体。', link: '#' },
+                { id: 11, category: '中国管制/制裁', title: '海关总署发布关于加强出口货物知识产权保护的通知', date: '2025-08-04', source: '海关总署', author: 'Sophia', domain: '供应链合规', industry: '制造业', summary: '通知要求各地海关加大对出口环节侵犯知识产权行为的查处力度，提升企业合规意识。', link: '#' },
+                { id: 12, category: '数据/AI合规', title: '工信部启动APP备案核查工作', date: '2025-08-01', source: '工业和信息化部', author: 'Ruby', domain: '数据合规', industry: '互联网', summary: '为落实《关于开展移动互联网应用程序备案工作的通知》，工信部组织开展APP备案情况监督检查。', link: '#' },
+                 { id: 13, category: '外国管制/制裁', title: 'Japan imposes new export controls on advanced semiconductor manufacturing equipment', date: '2025-07-30', source: '日本经济产业省(METI)', author: 'Kevin', domain: '出口管制', industry: '芯片', summary: 'Japan\'s Ministry of Economy, Trade and Industry (METI) announced restrictions on the export of 23 types of advanced chip-making technology, aligning with U.S. efforts.', link: '#' },
+                { id: 14, category: '外媒报道', title: 'Reuters: EU proposes mandatory supply chain due diligence rules for large companies', date: '2025-07-28', source: 'Reuters', author: 'Sophia', domain: '供应链合规', industry: '消费品', summary: 'The European Commission unveiled a proposal that would require large companies to conduct due diligence to identify, prevent, and mitigate human rights and environmental abuses in their supply chains.', link: '#' },
+                { id: 15, category: '中国管制/制裁', title: '国家安全部发布《反间谍安全防范工作规定》', date: '2025-07-25', source: '国家安全部', author: 'Owen', domain: '供应链合规', industry: '高科技', summary: '规定明确了机关、团体、企业事业组织和其他社会组织的反间谍安全防范主体责任。', link: '#' },
+            ];
+
+            const filtersData = {
+                '中国管制/制裁': { '发布机构': ['商务部', '外交部', '国务院关税税则委员会', '海关总署', '国家安全部'], '专业领域': ['出口管制', '经济制裁', '供应链合规'], '行业': ['高科技', '制造业', '消费品'] },
+                '外国管制/制裁': { '发布机构': ['美国商务部工业与安全局(BIS)', '欧盟委员会', '英国财政部', '日本经济产业省(METI)'], '专业领域': ['出口管制', '经济制裁'], '行业': ['芯片', '能源/光伏', '金融/保险'] },
+                '数据/AI合规': { '发布机构': ['国家互联网信息办公室', '加州隐私保护局(CPPA)', '工业和信息化部'], '专业领域': ['数据合规', '人工智能合规'], '行业': ['互联网'] },
+                '外媒报道': { '发布机构': ['The Hill', 'Dow Jones', 'Reuters'], '专业领域': ['人工智能合规', '供应链合规'], '行业': ['金融/保险', '物流港口', '消费品'] }
+            };
+            
+            let currentCategory = '中国管制/制裁';
+            
+            const newsListContainer = document.getElementById('news-list');
+            const noResultsDiv = document.getElementById('no-results');
+            const searchInput = document.getElementById('search-input');
+            const categoryTabs = document.querySelectorAll('.top-nav-tab');
+            const filtersContainer = document.getElementById('filters-container');
+            const applyFiltersBtn = document.getElementById('apply-filters');
+            const resetFiltersBtn = document.getElementById('reset-filters');
+            
+            const modal = document.getElementById('gemini-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            const modalLoader = document.getElementById('modal-loader');
+            const modalResult = document.getElementById('modal-result');
+            const modalFooter = document.getElementById('modal-footer');
+            const copyBtn = document.getElementById('copy-btn');
+
+            function renderNews(newsItems) {
+                newsListContainer.innerHTML = '';
+                if (newsItems.length === 0) { noResultsDiv.classList.remove('hidden'); } else { noResultsDiv.classList.add('hidden'); }
+                newsItems.forEach(item => {
+                    const card = `
+                        <div class="news-card bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                            <h3 class="text-xl font-bold text-blue-900 mb-2">${item.title}</h3>
+                            <div class="flex flex-wrap items-center text-sm text-gray-500 mb-4 gap-x-4 gap-y-1">
+                                <span>📅 ${item.date}</span>
+                                <span>🏢 ${item.source}</span>
+                                <span>👤 ${item.author}</span>
+                            </div>
+                            <p class="text-gray-600 mb-4">${item.summary}</p>
+                            <div class="flex justify-between items-center">
+                                <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="text-blue-700 font-semibold hover:underline">查看原文 &rarr;</a>
+                                <div class="flex space-x-2">
+                                    <button data-id="${item.id}" data-action="analyze" class="gemini-btn text-sm font-semibold py-1 px-3 rounded-full transition-all">✨ AI 解读</button>
+                                    <button data-id="${item.id}" data-action="draft" class="gemini-btn text-sm font-semibold py-1 px-3 rounded-full transition-all">✨ 生成邮件初稿</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    newsListContainer.innerHTML += card;
+                });
+                addGeminiButtonListeners();
+            }
+
+            function renderFilters(category) {
+                const filters = filtersData[category];
+                filtersContainer.innerHTML = '';
+                for (const key in filters) {
+                    let filterHtml = `<div class="mb-4"><h4 class="font-semibold mb-2 text-gray-700">${key}</h4><div class="space-y-1">`;
+                    filters[key].forEach(value => {
+                        filterHtml += `
+                            <div>
+                                <input type="checkbox" id="${value}" name="${key}" value="${value}" class="filter-checkbox hidden">
+                                <label for="${value}" class="cursor-pointer text-gray-600 hover:text-blue-800 transition-colors">${value}</label>
+                            </div>
+                        `;
+                    });
+                    filterHtml += `</div></div>`;
+                    filtersContainer.innerHTML += filterHtml;
+                }
+            }
+            
+            function filterAndRender() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedFilters = { '发布机构': [], '专业领域': [], '行业': [] };
+                document.querySelectorAll('#filters-container input[type="checkbox"]:checked').forEach(cb => { selectedFilters[cb.name].push(cb.value); });
+                let filteredNews = mockNewsData.filter(item => {
+                    const categoryMatch = item.category === currentCategory;
+                    const searchMatch = searchTerm === '' || item.title.toLowerCase().includes(searchTerm) || item.summary.toLowerCase().includes(searchTerm);
+                    const sourceMatch = selectedFilters['发布机构'].length === 0 || selectedFilters['发布机构'].includes(item.source);
+                    const domainMatch = selectedFilters['专业领域'].length === 0 || selectedFilters['专业领域'].includes(item.domain);
+                    const industryMatch = selectedFilters['行业'].length === 0 || selectedFilters['行业'].includes(item.industry);
+                    return categoryMatch && searchMatch && sourceMatch && domainMatch && industryMatch;
+                });
+                renderNews(filteredNews);
+            }
+
+            function switchCategory(category) {
+                currentCategory = category;
+                categoryTabs.forEach(tab => tab.classList.toggle('active', tab.dataset.category === category));
+                renderFilters(category);
+                searchInput.value = '';
+                filterAndRender();
+            }
+
+            async function callGeminiAPI(prompt, maxRetries = 3) {
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+                for (let i = 0; i < maxRetries; i++) {
+                    try {
+                        const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                        const result = await response.json();
+                        if (result.candidates && result.candidates.length > 0 && result.candidates[0].content.parts.length > 0) {
+                            return result.candidates[0].content.parts[0].text;
+                        } else { throw new Error("Invalid response structure from Gemini API"); }
+                    } catch (error) {
+                        if (i === maxRetries - 1) { console.error("Gemini API call failed after all retries:", error); return "抱歉，AI服务暂时遇到问题，请稍后再试。"; }
+                        const delay = Math.pow(2, i) * 1000;
+                        await new Promise(res => setTimeout(res, delay));
+                    }
+                }
+            }
+
+            function showModal(title) {
+                modalTitle.textContent = title;
+                modal.classList.remove('hidden');
+                modalLoader.classList.remove('hidden');
+                modalResult.classList.add('hidden');
+                modalFooter.classList.add('hidden');
+            }
+
+            function hideModal() { modal.classList.add('hidden'); }
+
+            function addGeminiButtonListeners() {
+                document.querySelectorAll('.gemini-btn').forEach(button => {
+                    button.addEventListener('click', async (e) => {
+                        const newsId = parseInt(e.target.dataset.id);
+                        const action = e.target.dataset.action;
+                        const newsItem = mockNewsData.find(item => item.id === newsId);
+                        if (!newsItem) return;
+                        let prompt = '';
+                        let modalTitleText = '';
+                        if (action === 'analyze') {
+                            modalTitleText = '✨ AI 解读';
+                            prompt = `作为一名资深的跨境合规律师，请深入分析以下新闻资讯，并提供一份专业的解读报告。报告应包含：\n1. **核心要点**：用1-2句话总结此事件的核心内容。\n2. **潜在影响与风险**：分析此事件可能对相关行业（特别是${newsItem.industry}行业）带来的具体影响和合规风险。\n3. **行动建议**：为可能受影响的企业提供2-3条清晰、可执行的初步行动建议。\n\n**新闻标题**：${newsItem.title}\n**新闻摘要**：${newsItem.summary}`;
+                        } else if (action === 'draft') {
+                            modalTitleText = '✨ 生成邮件初稿';
+                            prompt = `作为一名专业的合规律师，请根据以下新闻资讯，草拟一封简洁、专业的内部预警邮件，用于发送给公司的法务和业务团队。邮件要求：\n- 使用中文书写。\n- 包含一个清晰的邮件主题。\n- 正文需简要说明事件、点出其潜在影响，并建议团队进行讨论。\n- 整体风格专业、正式。\n\n**新闻标题**：${newsItem.title}\n**新闻摘要**：${newsItem.summary}`;
+                        }
+                        showModal(modalTitleText);
+                        const resultText = await callGeminiAPI(prompt);
+                        modalLoader.classList.add('hidden');
+                        modalResult.textContent = resultText;
+                        modalResult.classList.remove('hidden');
+                        if (action === 'draft') { modalFooter.classList.remove('hidden'); }
+                    });
+                });
+            }
+
+            modalCloseBtn.addEventListener('click', hideModal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(); });
+            copyBtn.addEventListener('click', () => {
+                const textToCopy = modalResult.textContent;
+                const textArea = document.createElement('textarea');
+                textArea.value = textToCopy;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copyBtn.textContent = '已复制!';
+                    setTimeout(() => { copyBtn.textContent = '复制到剪贴板'; }, 2000);
+                } catch (err) { console.error('无法复制文本: ', err); }
+                document.body.removeChild(textArea);
+            });
+
+            categoryTabs.forEach(tab => tab.addEventListener('click', () => switchCategory(tab.dataset.category)));
+            searchInput.addEventListener('input', filterAndRender);
+            applyFiltersBtn.addEventListener('click', filterAndRender);
+            resetFiltersBtn.addEventListener('click', () => {
+                document.querySelectorAll('#filters-container input[type="checkbox"]').forEach(cb => cb.checked = false);
+                filterAndRender();
+            });
+
+            switchCategory(currentCategory);
+        });
+    </script>
+</body>
+</html>

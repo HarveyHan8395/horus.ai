@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Star, TrendingUp, Globe, Building, Scale } from 'lucide-react';
 import { toast } from 'sonner';
 import AIModal from '../components/AIModal';
+import { useThemeStore } from '../stores/themeStore';
 
 interface WeeklyHighlight {
   id: string;
@@ -18,6 +19,7 @@ interface WeeklyHighlight {
 }
 
 const Weekly: React.FC = () => {
+  const { isDarkMode } = useThemeStore();
   const [selectedWeek, setSelectedWeek] = useState(() => {
     const now = new Date();
     const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
@@ -39,9 +41,9 @@ const Weekly: React.FC = () => {
   };
 
   const impactColors = {
-    high: 'bg-red-600',
-    medium: 'bg-yellow-600',
-    low: 'bg-green-600'
+    high: isDarkMode ? 'bg-red-600' : 'bg-red-500',
+    medium: isDarkMode ? 'bg-yellow-600' : 'bg-yellow-400',
+    low: isDarkMode ? 'bg-green-600' : 'bg-green-500'
   };
 
   const impactLabels = {
@@ -150,27 +152,43 @@ const Weekly: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700">
+    <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="mb-4 text-4xl font-bold text-white">每周重磅</h1>
-          <p className="text-blue-200">重要政策解读与深度分析</p>
+          <h1 className={`mb-4 text-4xl font-bold ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>每周重磅</h1>
+          <p className={`${
+            isDarkMode ? 'text-blue-200' : 'text-gray-600'
+          }`}>重要政策解读与深度分析</p>
         </div>
 
         {/* Week Selector */}
         <div className="mb-8 text-center">
-          <div className="inline-flex items-center gap-4 rounded-lg bg-white/10 p-4 backdrop-blur-sm">
+          <div className={`inline-flex items-center gap-4 rounded-lg p-4 backdrop-blur-sm ${
+            isDarkMode
+              ? 'bg-white/10'
+              : 'bg-white shadow-lg border border-gray-200'
+          }`}>
             <button
               onClick={() => handleWeekChange('prev')}
-              className="rounded-lg bg-white/20 px-4 py-2 text-white transition-all hover:bg-white/30"
+              className={`rounded-lg px-4 py-2 transition-all ${
+                isDarkMode
+                  ? 'bg-white/20 text-white hover:bg-white/30'
+                  : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+              }`}
             >
               上一周
             </button>
             
             <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-blue-200" />
-              <span className="text-lg font-semibold text-white">
+              <Calendar className={`h-5 w-5 ${
+                isDarkMode ? 'text-blue-200' : 'text-blue-600'
+              }`} />
+              <span className={`text-lg font-semibold ${
+                isDarkMode ? 'text-white' : 'text-gray-900'
+              }`}>
                 {getWeekRange(selectedWeek)}
               </span>
             </div>
@@ -178,7 +196,11 @@ const Weekly: React.FC = () => {
             <button
               onClick={() => handleWeekChange('next')}
               disabled={new Date(selectedWeek).getTime() >= new Date().getTime() - 7 * 24 * 60 * 60 * 1000}
-              className="rounded-lg bg-white/20 px-4 py-2 text-white transition-all hover:bg-white/30 disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`rounded-lg px-4 py-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+                isDarkMode
+                  ? 'bg-white/20 text-white hover:bg-white/30'
+                  : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+              }`}
             >
               下一周
             </button>
@@ -186,8 +208,12 @@ const Weekly: React.FC = () => {
         </div>
 
         {loading ? (
-          <div className="text-center text-white">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-white border-t-transparent"></div>
+          <div className={`text-center ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>
+            <div className={`inline-block h-8 w-8 animate-spin rounded-full border-4 border-t-transparent ${
+              isDarkMode ? 'border-white' : 'border-blue-600'
+            }`}></div>
             <p className="mt-2">加载中...</p>
           </div>
         ) : (
@@ -196,22 +222,32 @@ const Weekly: React.FC = () => {
               highlights.map((highlight, index) => (
                 <div
                   key={highlight.id}
-                  className="rounded-lg bg-white/10 p-6 backdrop-blur-sm transition-all hover:bg-white/20"
+                  className={`rounded-lg p-6 backdrop-blur-sm transition-all ${
+                    isDarkMode
+                      ? 'bg-white/10 hover:bg-white/20'
+                      : 'bg-white shadow-lg hover:shadow-xl border border-gray-200'
+                  }`}
                 >
                   {/* Header */}
                   <div className="mb-4 flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 text-sm font-bold text-white">
+                      <div className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white ${
+                        isDarkMode ? 'bg-yellow-500' : 'bg-yellow-400'
+                      }`}>
                         {index + 1}
                       </div>
                       <div className={`rounded px-2 py-1 text-xs text-white ${impactColors[highlight.impact]}`}>
                         {impactLabels[highlight.impact]}
                       </div>
-                      <span className="rounded bg-blue-600 px-2 py-1 text-xs text-white">
+                      <span className={`rounded px-2 py-1 text-xs text-white ${
+                        isDarkMode ? 'bg-blue-600' : 'bg-blue-500'
+                      }`}>
                         {categoryNames[highlight.category as keyof typeof categoryNames]}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-blue-200">
+                    <div className={`flex items-center gap-2 text-sm ${
+                      isDarkMode ? 'text-blue-200' : 'text-gray-500'
+                    }`}>
                       <Star className="h-4 w-4" />
                       <span>{highlight.relatedNews} 条相关</span>
                     </div>
@@ -219,27 +255,39 @@ const Weekly: React.FC = () => {
 
                   {/* Title and Publisher */}
                   <div className="mb-4">
-                    <h2 className="mb-2 text-xl font-bold text-white">
+                    <h2 className={`mb-2 text-xl font-bold ${
+                      isDarkMode ? 'text-white' : 'text-gray-900'
+                    }`}>
                       {highlight.title}
                     </h2>
-                    <div className="flex items-center gap-4 text-sm text-blue-200">
+                    <div className={`flex items-center gap-4 text-sm ${
+                      isDarkMode ? 'text-blue-200' : 'text-gray-500'
+                    }`}>
                       <span>{highlight.publisher}</span>
                       <span>{new Date(highlight.publishDate).toLocaleDateString('zh-CN')}</span>
                     </div>
                   </div>
 
                   {/* Summary */}
-                  <p className="mb-4 text-blue-100">
+                  <p className={`mb-4 ${
+                    isDarkMode ? 'text-blue-100' : 'text-gray-600'
+                  }`}>
                     {highlight.summary}
                   </p>
 
                   {/* Key Points */}
                   <div className="mb-4">
-                    <h3 className="mb-2 font-semibold text-white">关键要点：</h3>
+                    <h3 className={`mb-2 font-semibold ${
+                      isDarkMode ? 'text-white' : 'text-gray-900'
+                    }`}>关键要点：</h3>
                     <ul className="space-y-1">
                       {highlight.keyPoints.map((point, pointIndex) => (
-                        <li key={pointIndex} className="flex items-start gap-2 text-blue-200">
-                          <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-blue-400 flex-shrink-0"></span>
+                        <li key={pointIndex} className={`flex items-start gap-2 ${
+                          isDarkMode ? 'text-blue-200' : 'text-gray-600'
+                        }`}>
+                          <span className={`mt-1.5 h-1.5 w-1.5 rounded-full flex-shrink-0 ${
+                            isDarkMode ? 'bg-blue-400' : 'bg-blue-500'
+                          }`}></span>
                           <span>{point}</span>
                         </li>
                       ))}
@@ -249,7 +297,9 @@ const Weekly: React.FC = () => {
                   {/* Regions and Industries */}
                   <div className="mb-4 grid gap-4 md:grid-cols-2">
                     <div>
-                      <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
+                      <div className={`mb-2 flex items-center gap-2 text-sm font-semibold ${
+                        isDarkMode ? 'text-white' : 'text-gray-900'
+                      }`}>
                         <Globe className="h-4 w-4" />
                         <span>影响地区：</span>
                       </div>
@@ -257,7 +307,11 @@ const Weekly: React.FC = () => {
                         {highlight.regions.map((region, regionIndex) => (
                           <span
                             key={regionIndex}
-                            className="rounded bg-blue-600 px-2 py-1 text-xs text-white"
+                            className={`rounded px-2 py-1 text-xs ${
+                              isDarkMode
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-blue-100 text-blue-800'
+                            }`}
                           >
                             {region}
                           </span>
@@ -266,7 +320,9 @@ const Weekly: React.FC = () => {
                     </div>
                     
                     <div>
-                      <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-white">
+                      <div className={`mb-2 flex items-center gap-2 text-sm font-semibold ${
+                        isDarkMode ? 'text-white' : 'text-gray-900'
+                      }`}>
                         <Building className="h-4 w-4" />
                         <span>相关行业：</span>
                       </div>
@@ -274,7 +330,11 @@ const Weekly: React.FC = () => {
                         {highlight.industries.map((industry, industryIndex) => (
                           <span
                             key={industryIndex}
-                            className="rounded bg-purple-600 px-2 py-1 text-xs text-white"
+                            className={`rounded px-2 py-1 text-xs ${
+                              isDarkMode
+                                ? 'bg-purple-600 text-white'
+                                : 'bg-purple-100 text-purple-800'
+                            }`}
                           >
                             {industry}
                           </span>
@@ -293,7 +353,11 @@ const Weekly: React.FC = () => {
                           newsTitle: highlight.title
                         });
                       }}
-                      className="rounded bg-green-600 px-4 py-2 text-sm text-white transition-all hover:bg-green-700"
+                      className={`rounded px-4 py-2 text-sm transition-all ${
+                        isDarkMode
+                          ? 'bg-green-600 text-white hover:bg-green-700'
+                          : 'bg-green-500 text-white hover:bg-green-600'
+                      }`}
                     >
                       AI深度解读
                     </button>
@@ -305,13 +369,21 @@ const Weekly: React.FC = () => {
                           newsTitle: highlight.title
                         });
                       }}
-                      className="rounded bg-purple-600 px-4 py-2 text-sm text-white transition-all hover:bg-purple-700"
+                      className={`rounded px-4 py-2 text-sm transition-all ${
+                        isDarkMode
+                          ? 'bg-purple-600 text-white hover:bg-purple-700'
+                          : 'bg-purple-500 text-white hover:bg-purple-600'
+                      }`}
                     >
                       合规影响分析
                     </button>
                     <button
                       onClick={() => toast.info('详情页面开发中...', { duration: 2000 })}
-                      className="rounded bg-blue-600 px-4 py-2 text-sm text-white transition-all hover:bg-blue-700"
+                      className={`rounded px-4 py-2 text-sm transition-all ${
+                        isDarkMode
+                          ? 'bg-blue-600 text-white hover:bg-blue-700'
+                          : 'bg-blue-500 text-white hover:bg-blue-600'
+                      }`}
                     >
                       查看详情
                     </button>
@@ -319,38 +391,58 @@ const Weekly: React.FC = () => {
                 </div>
               ))
             ) : (
-              <div className="rounded-lg bg-white/10 p-8 text-center backdrop-blur-sm">
-                <TrendingUp className="mx-auto mb-4 h-12 w-12 text-blue-300" />
-                <p className="text-blue-200">本周暂无重磅资讯</p>
+              <div className={`rounded-lg p-8 text-center backdrop-blur-sm ${
+                isDarkMode
+                  ? 'bg-white/10'
+                  : 'bg-white shadow-lg border border-gray-200'
+              }`}>
+                <TrendingUp className={`mx-auto mb-4 h-12 w-12 ${
+                  isDarkMode ? 'text-blue-300' : 'text-gray-400'
+                }`} />
+                <p className={isDarkMode ? 'text-blue-200' : 'text-gray-500'}>
+                  本周暂无重磅资讯
+                </p>
               </div>
             )}
 
             {/* Weekly Summary */}
             {highlights.length > 0 && (
-              <div className="rounded-lg bg-white/10 p-6 backdrop-blur-sm">
-                <div className="mb-4 flex items-center gap-2 text-white">
+              <div className={`rounded-lg p-6 backdrop-blur-sm ${
+                isDarkMode
+                  ? 'bg-white/10'
+                  : 'bg-white shadow-lg border border-gray-200'
+              }`}>
+                <div className={`mb-4 flex items-center gap-2 ${
+                  isDarkMode ? 'text-white' : 'text-gray-900'
+                }`}>
                   <Scale className="h-5 w-5" />
                   <span className="text-lg font-semibold">本周总结</span>
                 </div>
                 
                 <div className="grid gap-4 md:grid-cols-3">
-                  <div className="rounded-lg bg-blue-600 p-4 text-center">
+                  <div className={`rounded-lg p-4 text-center ${
+                    isDarkMode ? 'bg-blue-600' : 'bg-blue-500'
+                  }`}>
                     <div className="text-2xl font-bold text-white">{highlights.length}</div>
-                    <div className="text-blue-100">重磅事件</div>
+                    <div className={isDarkMode ? 'text-blue-100' : 'text-blue-100'}>重磅事件</div>
                   </div>
                   
-                  <div className="rounded-lg bg-red-600 p-4 text-center">
+                  <div className={`rounded-lg p-4 text-center ${
+                    isDarkMode ? 'bg-red-600' : 'bg-red-500'
+                  }`}>
                     <div className="text-2xl font-bold text-white">
                       {highlights.filter(h => h.impact === 'high').length}
                     </div>
-                    <div className="text-red-100">高影响事件</div>
+                    <div className={isDarkMode ? 'text-red-100' : 'text-red-100'}>高影响事件</div>
                   </div>
                   
-                  <div className="rounded-lg bg-green-600 p-4 text-center">
+                  <div className={`rounded-lg p-4 text-center ${
+                    isDarkMode ? 'bg-green-600' : 'bg-green-500'
+                  }`}>
                     <div className="text-2xl font-bold text-white">
                       {highlights.reduce((sum, h) => sum + h.relatedNews, 0)}
                     </div>
-                    <div className="text-green-100">相关资讯</div>
+                    <div className={isDarkMode ? 'text-green-100' : 'text-green-100'}>相关资讯</div>
                   </div>
                 </div>
               </div>

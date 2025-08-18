@@ -1,7 +1,9 @@
 import React from 'react';
 import { Play, Calendar, Clock, Headphones, Star, ArrowRight } from 'lucide-react';
+import { useThemeStore } from '../stores/themeStore';
 
 const Podcast: React.FC = () => {
+  const { isDarkMode } = useThemeStore();
   const upcomingEpisodes = [
     {
       id: '1',
@@ -51,27 +53,31 @@ const Podcast: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700">
+    <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
         <div className="mb-12 text-center">
-          <h1 className="mb-4 text-5xl font-bold text-white">AI播客</h1>
-          <p className="mx-auto max-w-2xl text-xl text-blue-200">
+          <h1 className={`mb-4 text-5xl font-bold ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>AI播客</h1>
+          <p className={`mx-auto max-w-2xl text-xl ${
+            isDarkMode ? 'text-blue-200' : 'text-gray-600'
+          }`}>
             AI驱动的政策解读播客，为您深度剖析重大合规政策
           </p>
         </div>
 
         {/* Coming Soon Banner */}
-        <div className="mb-12 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 p-8 text-center">
-          <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-white/20">
-            <Play className="h-10 w-10 text-white" />
+        <div className="mb-12 rounded-3xl bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700 p-10 text-center shadow-2xl">
+          <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-white/30 backdrop-blur-sm">
+            <Play className="h-12 w-12 text-white" />
           </div>
-          <h2 className="mb-4 text-3xl font-bold text-white">敬请期待</h2>
-          <p className="mx-auto max-w-lg text-lg text-blue-100">
+          <h2 className="mb-6 text-4xl font-bold text-white">敬请期待</h2>
+          <p className="mx-auto max-w-2xl text-xl text-blue-100 leading-relaxed">
             我们正在精心打造AI播客功能，即将为您带来前所未有的政策解读体验
           </p>
-          <div className="mt-6">
-            <button className="rounded-lg bg-white px-8 py-3 font-semibold text-blue-900 transition-all hover:bg-blue-50">
+          <div className="mt-8">
+            <button className="rounded-xl bg-white px-10 py-4 text-lg font-semibold text-blue-900 transition-all hover:bg-blue-50 hover:scale-105 shadow-lg">
               订阅更新通知
             </button>
           </div>
@@ -79,20 +85,32 @@ const Podcast: React.FC = () => {
 
         {/* Features */}
         <div className="mb-12">
-          <h3 className="mb-8 text-center text-2xl font-bold text-white">功能特色</h3>
+          <h3 className={`mb-8 text-center text-2xl font-bold ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>功能特色</h3>
           <div className="grid gap-6 md:grid-cols-3">
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="rounded-lg bg-white/10 p-6 text-center backdrop-blur-sm transition-all hover:bg-white/20"
+                className={`rounded-lg p-6 text-center backdrop-blur-sm transition-all ${
+                  isDarkMode
+                    ? 'bg-white/10 hover:bg-white/20'
+                    : 'bg-white shadow-lg hover:shadow-xl border border-gray-200'
+                }`}
               >
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-600 text-white">
+                <div className={`mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full ${
+                  isDarkMode ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-700'
+                }`}>
                   {feature.icon}
                 </div>
-                <h4 className="mb-2 text-xl font-semibold text-white">
+                <h4 className={`mb-2 text-xl font-semibold ${
+                  isDarkMode ? 'text-white' : 'text-gray-900'
+                }`}>
                   {feature.title}
                 </h4>
-                <p className="text-blue-200">
+                <p className={`${
+                  isDarkMode ? 'text-blue-200' : 'text-gray-600'
+                }`}>
                   {feature.description}
                 </p>
               </div>
@@ -102,39 +120,59 @@ const Podcast: React.FC = () => {
 
         {/* Upcoming Episodes */}
         <div className="mb-12">
-          <h3 className="mb-8 text-center text-2xl font-bold text-white">即将推出</h3>
+          <h3 className={`mb-8 text-center text-2xl font-bold ${
+            isDarkMode ? 'text-white' : 'text-gray-900'
+          }`}>即将推出</h3>
           <div className="space-y-4">
             {upcomingEpisodes.map((episode) => (
               <div
                 key={episode.id}
-                className={`rounded-lg p-6 backdrop-blur-sm transition-all hover:bg-white/20 ${
-                  episode.featured
-                    ? 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-400/30'
-                    : 'bg-white/10'
+                className={`rounded-lg p-6 backdrop-blur-sm transition-all ${
+                  isDarkMode
+                    ? `hover:bg-white/20 ${
+                        episode.featured
+                          ? 'bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-400/30'
+                          : 'bg-white/10'
+                      }`
+                    : `hover:shadow-xl ${
+                        episode.featured
+                          ? 'bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-300'
+                          : 'bg-white shadow-lg border border-gray-200'
+                      }`
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="mb-2 flex items-center gap-3">
                       {episode.featured && (
-                        <span className="rounded bg-yellow-500 px-2 py-1 text-xs font-semibold text-black">
+                        <span className={`rounded px-2 py-1 text-xs font-semibold ${
+                          isDarkMode ? 'bg-yellow-500 text-black' : 'bg-yellow-400 text-black'
+                        }`}>
                           精选
                         </span>
                       )}
-                      <span className="rounded bg-blue-600 px-2 py-1 text-xs text-white">
+                      <span className={`rounded px-2 py-1 text-xs ${
+                        isDarkMode ? 'bg-blue-600 text-white' : 'bg-blue-100 text-blue-800'
+                      }`}>
                         {episode.category}
                       </span>
                     </div>
                     
-                    <h4 className="mb-2 text-xl font-semibold text-white">
+                    <h4 className={`mb-2 text-xl font-semibold ${
+                      isDarkMode ? 'text-white' : 'text-gray-900'
+                    }`}>
                       {episode.title}
                     </h4>
                     
-                    <p className="mb-3 text-blue-200">
+                    <p className={`mb-3 ${
+                      isDarkMode ? 'text-blue-200' : 'text-gray-600'
+                    }`}>
                       {episode.description}
                     </p>
                     
-                    <div className="flex items-center gap-4 text-sm text-blue-300">
+                    <div className={`flex items-center gap-4 text-sm ${
+                      isDarkMode ? 'text-blue-300' : 'text-gray-500'
+                    }`}>
                       <div className="flex items-center gap-1">
                         <Clock className="h-4 w-4" />
                         <span>{episode.duration}</span>
@@ -146,7 +184,11 @@ const Podcast: React.FC = () => {
                     </div>
                   </div>
                   
-                  <button className="ml-4 flex h-12 w-12 items-center justify-center rounded-full bg-white/20 text-white transition-all hover:bg-white/30">
+                  <button className={`ml-4 flex h-12 w-12 items-center justify-center rounded-full transition-all ${
+                    isDarkMode
+                      ? 'bg-white/20 text-white hover:bg-white/30'
+                      : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+                  }`}>
                     <Play className="h-5 w-5" />
                   </button>
                 </div>
@@ -156,10 +198,18 @@ const Podcast: React.FC = () => {
         </div>
 
         {/* Newsletter Signup */}
-        <div className="rounded-lg bg-white/10 p-8 backdrop-blur-sm">
+        <div className={`rounded-lg p-8 backdrop-blur-sm ${
+          isDarkMode
+            ? 'bg-white/10'
+            : 'bg-white shadow-lg border border-gray-200'
+        }`}>
           <div className="text-center">
-            <h3 className="mb-4 text-2xl font-bold text-white">获取最新更新</h3>
-            <p className="mb-6 text-blue-200">
+            <h3 className={`mb-4 text-2xl font-bold ${
+              isDarkMode ? 'text-white' : 'text-gray-900'
+            }`}>获取最新更新</h3>
+            <p className={`mb-6 ${
+              isDarkMode ? 'text-blue-200' : 'text-gray-600'
+            }`}>
               订阅我们的通知，第一时间了解AI播客上线动态
             </p>
             
@@ -167,10 +217,16 @@ const Podcast: React.FC = () => {
               <input
                 type="email"
                 placeholder="输入您的邮箱地址"
-                className="flex-1 rounded-lg bg-white/20 px-4 py-3 text-white placeholder-blue-300 backdrop-blur-sm focus:bg-white/30 focus:outline-none"
+                className={`flex-1 rounded-lg px-4 py-3 backdrop-blur-sm focus:outline-none ${
+                  isDarkMode
+                    ? 'bg-white/20 text-white placeholder-blue-300 focus:bg-white/30'
+                    : 'bg-gray-50 text-gray-900 placeholder-gray-500 focus:bg-white border border-gray-300'
+                }`}
               />
-              <button className="flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition-all hover:bg-blue-700">
-                <span>订阅</span>
+              <button className={`flex items-center gap-2 rounded-lg px-5 py-3 font-medium transition-colors ${
+                isDarkMode ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-500 text-white hover:bg-blue-600'
+              }`}>
+                订阅我们的通讯
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>

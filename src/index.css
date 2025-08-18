@@ -12,28 +12,65 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Deep Blue Theme Variables */
-  --primary-blue: #1e40af;
-  --primary-blue-dark: #1e3a8a;
-  --secondary-blue: #3b82f6;
-  --accent-blue: #60a5fa;
-  --light-blue: #dbeafe;
-  --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-  --gradient-secondary: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  /* 深蓝色主题 */
+  --deep-blue-1: #111827; /* 使用 gray-900 替代 #1a1a1a */
+  --deep-blue-2: #111827; /* 使用 gray-900 替代 #2a2a2a (保留旧值: #2a2a2a) */
+  --deep-blue-3: #1f2937; /* 使用 gray-800 替代 #3a3a3a */
+  --accent-blue: #64ffda;
+  --light-blue: #8892b0;
+  --light-text: #ccd6f6;
+  --white: #e6f1ff;
+  
+  /* 浅色主题 */
+  --light-bg: #f8f9fa;
+  --light-card: #ffffff;
+  --light-text-primary: #212529;
+  --light-text-secondary: #495057;
+  --light-border: #dee2e6;
+  --light-accent: #0d6efd;
+  
+  /* 主题切换变量 - 默认深色 */
+  --bg-primary: var(--deep-blue-1);
+  --bg-secondary: var(--deep-blue-2);
+  --bg-tertiary: var(--deep-blue-3);
+  --text-primary: var(--light-text);
+  --text-secondary: var(--light-blue);
+  --accent-color: var(--accent-blue);
+  --border-color: rgba(100, 255, 218, 0.1);
+  --card-bg: var(--deep-blue-2); /* 现在也是 gray-900 (#111827) */
+}
+
+/* 浅色模式样式 */
+[data-theme="light"] {
+  --bg-primary: var(--light-bg);
+  --bg-secondary: var(--light-card);
+  --bg-tertiary: #e9ecef;
+  --text-primary: var(--light-text-primary);
+  --text-secondary: var(--light-text-secondary);
+  --accent-color: var(--light-accent);
+  --border-color: var(--light-border);
+  --card-bg: var(--light-card);
 }
 
 /* Global Styles */
 body {
   margin: 0;
-  padding: 0;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  transition: background-color 0.3s ease;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--bg-primary), var(--bg-tertiary)) !important;
+  color: var(--text-primary);
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* Dark Mode */
-.dark body {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+/* Ensure all pages have consistent background */
+#root {
+  background: linear-gradient(135deg, var(--bg-primary), var(--bg-tertiary)) !important;
+  min-height: 100vh;
 }
+
+/* 移除以下两段以避免与 data-theme 冲突：
+   1) .dark { ... } 
+   2) :not(.dark) { ... } */
 
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
@@ -45,15 +82,16 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #1e40af, #3b82f6);
+  background: linear-gradient(135deg, #0f172a, #1e293b);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #1e3a8a, #1e40af);
+  background: linear-gradient(135deg, #020617, #0f172a);
 }
 
-.dark ::-webkit-scrollbar-track {
+/* 将原来的 .dark ::-webkit-scrollbar-track 替换为 data-theme 选择器 */
+[data-theme="dark"] ::-webkit-scrollbar-track {
   background: #1e293b;
 }
 

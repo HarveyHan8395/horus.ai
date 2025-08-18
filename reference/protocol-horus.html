@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horus.AI | AI-Powered Legal News & Analysis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            /* 深蓝色主题 */
+            --deep-blue-1: #1a1a1a;
+            --deep-blue-2: #2a2a2a;
+            --deep-blue-3: #3a3a3a;
+            --accent-blue: #64ffda;
+            --light-blue: #8892b0;
+            --light-text: #ccd6f6;
+            --white: #e6f1ff;
+            
+            /* 浅色主题 */
+            --light-bg: #f8f9fa;
+            --light-card: #ffffff;
+            --light-text-primary: #212529;
+            --light-text-secondary: #495057;
+            --light-border: #dee2e6;
+            --light-accent: #0d6efd;
+            
+            /* 主题切换变量 */
+            --bg-primary: var(--deep-blue-1);
+            --bg-secondary: var(--deep-blue-2);
+            --bg-tertiary: var(--deep-blue-3);
+            --text-primary: var(--light-text);
+            --text-secondary: var(--light-blue);
+            --accent-color: var(--accent-blue);
+            --border-color: rgba(100, 255, 218, 0.1);
+            --card-bg: var(--deep-blue-2);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: var(--light-bg);
+            --bg-secondary: var(--light-card);
+            --bg-tertiary: #e9ecef;
+            --text-primary: var(--light-text-primary);
+            --text-secondary: var(--light-text-secondary);
+            --accent-color: var(--light-accent);
+            --border-color: var(--light-border);
+            --card-bg: var(--light-card);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-tertiary));
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Cpath d='M0,400 Q300,200 600,400 T1200,400 L1200,800 L0,800 Z' fill='%2364ffda' fill-opacity='0.03'/%3E%3Cpath d='M0,500 Q400,300 800,500 T1200,500 L1200,800 L0,800 Z' fill='%2364ffda' fill-opacity='0.02'/%3E%3Cpath d='M0,600 Q200,400 400,600 T800,600 T1200,600 L1200,800 L0,800 Z' fill='%2364ffda' fill-opacity='0.01'/%3E%3C/svg%3E");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: bottom;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        body:not([data-theme="light"])::before {
+            opacity: 1;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 导航栏样式 */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(26, 26, 26, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        [data-theme="light"] header {
+            background: rgba(248, 249, 250, 0.85);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            height: 50px;
+            width: 50px;
+            background: linear-gradient(135deg, #0a192f, #64ffda);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .logo-text span {
+            color: var(--accent-color);
+            font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 1.05rem;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .nav-links a.active {
+            color: var(--accent-color);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-color);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .theme-toggle:hover {
+            color: var(--accent-color);
+            transform: rotate(15deg);
+        }
+
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: var(--deep-blue-1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(100, 255, 218, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .btn-outline:hover {
+            background: rgba(100, 255, 218, 0.1);
+        }
+
+        /* 英雄区域 */
+        .hero {
+            padding: 6rem 0 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero-subtitle {
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--text-primary), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* 新闻分类部分 */
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--accent-color);
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin-top: 1rem;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(100, 255, 218, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .category-icon i {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .category-stats {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* 新闻卡片 */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .news-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .news-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .news-agency {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .agency-logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            background: var(--bg-tertiary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .agency-name {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .news-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .news-expert {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .expert-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #64ffda, #0a192f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .expert-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .expert-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .expert-role {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .news-content {
+            padding: 1.5rem;
+        }
+
+        .news-summary {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .news-date {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .news-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.7rem;
+            border-radius: 6px;
+            background: var(--bg-tertiary);
+            border: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn:hover {
+            background: var(--accent-color);
+            color: var(--deep-blue-1);
+        }
+
+        /* 筛选器部分 */
+        .filters {
+            background: var(--card-bg);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+        }
+
+        .filter-option {
+            padding: 0.5rem 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 30px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .filter-option:hover {
+            background: rgba(100, 255, 218, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .filter-option.active {
+            background: var(--accent-color);
+            color: var(--deep-blue-1);
+            font-weight: 500;
+        }
+
+        /* 页脚 */
+        footer {
+            background: var(--bg-tertiary);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-col h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--accent-color);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-links a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .custom-service {
+            background: rgba(100, 255, 218, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .custom-service p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .nav-links {
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .hero {
+                padding: 4rem 0 2rem;
+            }
+            
+            .hero-title {
+                font-size: 2.3rem;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .section {
+                padding: 3rem 0;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+            }
+            
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-desc {
+                font-size: 1rem;
+            }
+            
+            .filter-options {
+                gap: 0.5rem;
+            }
+            
+            .filter-option {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <div class="navbar">
+                <div class="logo-container">
+                    <div class="logo">H</div>
+                    <div class="logo-text">Horus.<span>AI</span></div>
+                </div>
+                
+                <div class="nav-links">
+                    <a href="#" class="active">首页</a>
+                    <a href="#">即时资讯</a>
+                    <a href="#">资讯日报</a>
+                    <a href="#">每周重磅</a>
+                    <a href="#">AI播客</a>
+                    <a href="#">企业定制</a>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="btn btn-outline">登录</button>
+                    <button class="btn btn-primary">免费试用</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-subtitle">AI Legal RegTech</div>
+                <h1 class="hero-title">AI-Powered Legal News & Analysis</h1>
+                <p class="hero-desc">Horus.AI 为跨境合规领域的专业人士提供由人工智能驱动的实时监管资讯、深度分析和合规建议，帮助您在全球复杂监管环境中保持领先。</p>
+                
+                <div class="hero-cta">
+                    <button class="btn btn-primary">立即体验</button>
+                    <button class="btn btn-outline">预约演示</button>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">12,850+</div>
+                        <div class="stat-label">监管资讯</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">200+</div>
+                        <div class="stat-label">专业机构</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">98.7%</div>
+                        <div class="stat-label">准确率</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 资讯分类 -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">即时资讯分类</h2>
+                    <p class="section-subtitle">实时更新的全球监管资讯，按专业领域和行业分类，助您快速获取关键信息</p>
+                </div>
+            </div>
+            
+            <div class="categories">
+                <!-- 中国管制/制裁 -->
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-landmark"></i>
+                        </div>
+                        <h3 class="category-title">中国管制/制裁</h3>
+                        <p class="category-desc">商务部、安管局、外交部等机构发布的最新管制措施</p>
+                    </div>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-value">328</div>
+                            <div class="stat-label">本月更新</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">发布机构</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 外国管制/制裁 -->
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <h3 class="category-title">外国管制/制裁</h3>
+                        <p class="category-desc">OFAC、BIS、DOD等国际机构发布的最新管制措施</p>
+                    </div>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-value">512</div>
+                            <div class="stat-label">本月更新</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">发布机构</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 数据合规/人工智能资讯 -->
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3 class="category-title">数据合规/AI资讯</h3>
+                        <p class="category-desc">全球数据保护、人工智能监管最新动态和政策分析</p>
+                    </div>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-value">247</div>
+                            <div class="stat-label">本月更新</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">7</div>
+                            <div class="stat-label">发布机构</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 外国媒体报道 -->
+                <div class="category-card">
+                    <div class="category-header">
+                        <div class="category-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <h3 class="category-title">外国媒体报道</h3>
+                        <p class="category-desc">国会山、道琼斯等国际媒体对合规领域的专业报道</p>
+                    </div>
+                    <div class="category-stats">
+                        <div class="stat">
+                            <div class="stat-value">1,024</div>
+                            <div class="stat-label">本月更新</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">媒体机构</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 最新资讯 -->
+    <section class="section" style="background: var(--bg-tertiary);">
+        <div class="container">
+            <div class="section-header">
+                <div>
+                    <h2 class="section-title">最新合规资讯</h2>
+                    <p class="section-subtitle">实时更新的全球监管动态，AI提取关键信息并提供专业分析</p>
+                </div>
+            </div>
+            
+            <!-- 筛选器 -->
+            <div class="filters">
+                <div class="filter-section">
+                    <h3 class="filter-title"><i class="fas fa-filter"></i> 发布机构</h3>
+                    <div class="filter-options">
+                        <div class="filter-option active">全部</div>
+                        <div class="filter-option">商务部</div>
+                        <div class="filter-option">OFAC</div>
+                        <div class="filter-option">BIS</div>
+                        <div class="filter-option">网信办</div>
+                        <div class="filter-option">国会山</div>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3 class="filter-title"><i class="fas fa-gavel"></i> 专业领域</h3>
+                    <div class="filter-options">
+                        <div class="filter-option active">全部</div>
+                        <div class="filter-option">出口管制</div>
+                        <div class="filter-option">经济制裁</div>
+                        <div class="filter-option">数据合规</div>
+                        <div class="filter-option">供应链合规</div>
+                        <div class="filter-option">人工智能合规</div>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3 class="filter-title"><i class="fas fa-industry"></i> 行业</h3>
+                    <div class="filter-options">
+                        <div class="filter-option active">全部</div>
+                        <div class="filter-option">高科技</div>
+                        <div class="filter-option">芯片</div>
+                        <div class="filter-option">汽车/电池</div>
+                        <div class="filter-option">金融/保险</div>
+                        <div class="filter-option">能源/光伏</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 新闻列表 -->
+            <div class="news-grid">
+                <!-- 新闻卡片 1 -->
+                <div class="news-card">
+                    <div class="news-header">
+                        <div class="news-agency">
+                            <div class="agency-logo">OFAC</div>
+                            <div class="agency-name">美国财政部海外资产控制办公室</div>
+                        </div>
+                        <h3 class="news-title">OFAC发布针对俄罗斯金属行业的新制裁措施</h3>
+                        <div class="news-expert">
+                            <div class="expert-avatar">张</div>
+                            <div class="expert-info">
+                                <div class="expert-name">张明远</div>
+                                <div class="expert-role">高级制裁分析师</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="news-content">
+                        <p class="news-summary">美国财政部宣布对俄罗斯金属行业实施新一轮制裁，针对铝、铜、镍等关键金属的生产和出口企业，旨在限制俄罗斯通过金属出口获取战争资金的能力。</p>
+                        <div class="news-meta">
+                            <div class="news-date">
+                                <i class="far fa-clock"></i> 2023-10-15
+                            </div>
+                            <a href="#" class="news-link">原文链接</a>
+                        </div>
+                        <div class="news-actions">
+                            <button class="action-btn">
+                                <i class="fas fa-robot"></i> AI解读
+                            </button>
+                            <button class="action-btn">
+                                <i class="fas fa-lightbulb"></i> 合规建议
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 新闻卡片 2 -->
+                <div class="news-card">
+                    <div class="news-header">
+                        <div class="news-agency">
+                            <div class="agency-logo">商</div>
+                            <div class="agency-name">中国商务部</div>
+                        </div>
+                        <h3 class="news-title">商务部更新《两用物项和技术出口管制清单》</h3>
+                        <div class="news-expert">
+                            <div class="expert-avatar">李</div>
+                            <div class="expert-info">
+                                <div class="expert-name">李思睿</div>
+                                <div class="expert-role">出口管制专家</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="news-content">
+                        <p class="news-summary">中国商务部发布公告，对《两用物项和技术出口管制清单》进行修订，新增23项管制物项，主要涉及半导体材料、先进传感器和量子技术领域。</p>
+                        <div class="news-meta">
+                            <div class="news-date">
+                                <i class="far fa-clock"></i> 2023-10-14
+                            </div>
+                            <a href="#" class="news-link">原文链接</a>
+                        </div>
+                        <div class="news-actions">
+                            <button class="action-btn">
+                                <i class="fas fa-robot"></i> AI解读
+                            </button>
+                            <button class="action-btn">
+                                <i class="fas fa-lightbulb"></i> 合规建议
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 新闻卡片 3 -->
+                <div class="news-card">
+                    <div class="news-header">
+                        <div class="news-agency">
+                            <div class="agency-logo">网</div>
+                            <div class="agency-name">国家网信办</div>
+                        </div>
+                        <h3 class="news-title">《生成式人工智能服务管理暂行办法》正式出台</h3>
+                        <div class="news-expert">
+                            <div class="expert-avatar">王</div>
+                            <div class="expert-info">
+                                <div class="expert-name">王雅涵</div>
+                                <div class="expert-role">数据合规总监</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="news-content">
+                        <p class="news-summary">国家互联网信息办公室联合多部门发布《生成式人工智能服务管理暂行办法》，对AI模型训练数据、内容安全、用户权益保护等方面提出明确要求。</p>
+                        <div class="news-meta">
+                            <div class="news-date">
+                                <i class="far fa-clock"></i> 2023-10-12
+                            </div>
+                            <a href="#" class="news-link">原文链接</a>
+                        </div>
+                        <div class="news-actions">
+                            <button class="action-btn">
+                                <i class="fas fa-robot"></i> AI解读
+                            </button>
+                            <button class="action-btn">
+                                <i class="fas fa-lightbulb"></i> 合规建议
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>Horus.AI</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">AI-Powered Legal News & Analysis</p>
+                    <div class="footer-links">
+                        <li><a href="#"><i class="fas fa-envelope"></i> contact@horus-ai.com</a></li>
+                        <li><a href="#"><i class="fas fa-phone"></i> +86 10 8888 7777</a></li>
+                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> 北京市朝阳区建国路88号</a></li>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>产品服务</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> 即时资讯</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> 资讯日报</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> 每周重磅</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> AI播客</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> 企业定制</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>资源</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> 合规知识库</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> 监管动态地图</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> 行业白皮书</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> 合规培训</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> 专家网络</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <div class="custom-service">
+                        <h3>企业定制服务</h3>
+                        <p>为您的企业提供专属的合规资讯订阅、风险预警和定制化分析报告</p>
+                        <button class="btn btn-primary">联系我们</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2023 Horus.AI - AI Legal RegTech. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        // 检查本地存储或系统偏好
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const currentTheme = localStorage.getItem('theme');
+        
+        if (currentTheme === 'light' || (!currentTheme && !prefersDarkScheme.matches)) {
+            document.body.setAttribute('data-theme', 'light');
+            themeIcon.className = 'fas fa-sun';
+        } else {
+            document.body.setAttribute('data-theme', 'dark');
+            themeIcon.className = 'fas fa-moon';
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            if (currentTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.body.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+        
+        // 筛选功能
+        const filterOptions = document.querySelectorAll('.filter-option');
+        filterOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const parent = this.parentElement;
+                const siblings = parent.querySelectorAll('.filter-option');
+                
+                siblings.forEach(sib => {
+                    if (sib !== this && sib.classList.contains('active')) {
+                        sib.classList.remove('active');
+                    }
+                });
+                
+                this.classList.toggle('active');
+                
+                // 如果点击的是"全部"选项，取消其他选项的选中状态
+                if (this.textContent === '全部') {
+                    siblings.forEach(sib => {
+                        if (sib !== this && sib.classList.contains('active')) {
+                            sib.classList.remove('active');
+                        }
+                    });
+                } else {
+                    // 如果选择了其他选项，取消"全部"的选中状态
+                    const allOption = parent.querySelector('.filter-option:first-child');
+                    if (allOption.classList.contains('active')) {
+                        allOption.classList.remove('active');
+                    }
+                }
+            });
+        });
+        
+        // 新闻卡片悬停效果增强
+        const newsCards = document.querySelectorAll('.news-card');
+        newsCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-8px)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

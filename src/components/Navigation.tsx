@@ -30,15 +30,28 @@ const Navigation: React.FC<NavigationProps> = ({ isDarkMode = false, toggleDarkM
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-gradient-to-r from-blue-900 via-blue-800 to-blue-700 shadow-lg backdrop-blur-sm">
+    <nav className={`sticky top-0 z-50 shadow-lg backdrop-blur-sm transition-colors duration-300 ${
+      isDarkMode 
+        ? 'bg-gradient-navy' 
+        : 'bg-white/90 border-b border-gray-200'
+    }`}>
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-white font-bold text-xl">
-              H
+          <Link to="/" className="flex items-center space-x-3">
+            <img 
+              src="https://dachenglaw.oss-cn-beijing.aliyuncs.com/2025/08/17/5MRdLh.png" 
+              alt="Horus.AI Logo" 
+              className="h-10 w-10 object-contain"
+            />
+            <div className="flex flex-col">
+              <span className={`text-2xl font-bold leading-tight ${
+                isDarkMode ? 'text-white' : 'text-gray-900'
+              }`}>Horus.AI</span>
+              <span className={`text-xs font-medium tracking-wide ${
+                isDarkMode ? 'text-blue-200' : 'text-blue-600'
+              }`}>AI LEGAL REGTECH</span>
             </div>
-            <span className="text-2xl font-bold text-white">Horus.AI</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -47,10 +60,14 @@ const Navigation: React.FC<NavigationProps> = ({ isDarkMode = false, toggleDarkM
               <Link
                 key={item.path}
                 to={item.path}
-                className={`relative px-3 py-2 text-sm font-medium transition-all duration-200 hover:text-blue-200 ${
-                  isActive(item.path)
-                    ? 'text-white'
-                    : 'text-blue-100'
+                className={`relative px-3 py-2 text-sm font-medium transition-all duration-200 ${
+                  isDarkMode
+                    ? `hover:text-blue-200 ${
+                        isActive(item.path) ? 'text-white' : 'text-blue-100'
+                      }`
+                    : `hover:text-blue-600 ${
+                        isActive(item.path) ? 'text-gray-900' : 'text-gray-600'
+                      }`
                 }`}
               >
                 {item.label}
@@ -67,7 +84,11 @@ const Navigation: React.FC<NavigationProps> = ({ isDarkMode = false, toggleDarkM
             {toggleDarkMode && (
               <button
                 onClick={toggleDarkMode}
-                className="rounded-lg bg-white/10 p-2 text-white transition-all hover:bg-white/20"
+                className={`rounded-lg p-2 transition-all ${
+                  isDarkMode 
+                    ? 'bg-white/10 text-white hover:bg-white/20' 
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
                 aria-label="切换主题"
               >
                 {isDarkMode ? (
@@ -81,7 +102,11 @@ const Navigation: React.FC<NavigationProps> = ({ isDarkMode = false, toggleDarkM
             {/* Mobile Menu Button */}
             <button
               onClick={toggleMenu}
-              className="lg:hidden rounded-lg bg-white/10 p-2 text-white transition-all hover:bg-white/20"
+              className={`lg:hidden rounded-lg p-2 transition-all ${
+                isDarkMode 
+                  ? 'bg-white/10 text-white hover:bg-white/20' 
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
               aria-label="切换菜单"
             >
               {isMenuOpen ? (
@@ -95,7 +120,9 @@ const Navigation: React.FC<NavigationProps> = ({ isDarkMode = false, toggleDarkM
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden border-t border-blue-600 py-4">
+          <div className={`lg:hidden py-4 ${
+            isDarkMode ? 'border-t border-blue-600' : 'border-t border-gray-200'
+          }`}>
             <div className="space-y-2">
               {navItems.map((item) => (
                 <Link
@@ -103,9 +130,13 @@ const Navigation: React.FC<NavigationProps> = ({ isDarkMode = false, toggleDarkM
                   to={item.path}
                   onClick={() => setIsMenuOpen(false)}
                   className={`block rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200 ${
-                    isActive(item.path)
-                      ? 'bg-blue-600 text-white'
-                      : 'text-blue-100 hover:bg-white/10 hover:text-white'
+                    isDarkMode
+                      ? isActive(item.path)
+                        ? 'bg-blue-600 text-white'
+                        : 'text-blue-100 hover:bg-white/10 hover:text-white'
+                      : isActive(item.path)
+                        ? 'bg-blue-600 text-white'
+                        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                   }`}
                 >
                   {item.label}

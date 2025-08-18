@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, FileText, TrendingUp } from 'lucide-react';
 import { toast } from 'sonner';
 import AIModal from '../components/AIModal';
+import { useThemeStore } from '../stores/themeStore';
 
 interface DailyDigest {
   date: string;
@@ -22,6 +23,7 @@ interface DailyDigest {
 }
 
 const Daily: React.FC = () => {
+  const { isDarkMode } = useThemeStore();
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [dailyDigest, setDailyDigest] = useState<DailyDigest | null>(null);
   const [loading, setLoading] = useState(true);
@@ -117,81 +119,109 @@ const Daily: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700">
+    <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="mb-4 text-4xl font-bold text-white">资讯日报</h1>
-          <p className="text-blue-200">每日合规资讯精选汇总</p>
+          <h1 className={`mb-4 text-4xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>资讯日报</h1>
+          <p className={`${isDarkMode ? 'text-blue-200' : 'text-gray-600'}`}>每日合规资讯精选汇总</p>
         </div>
 
         {/* Date Selector */}
         <div className="mb-8 flex items-center justify-center gap-4">
           <button
             onClick={() => handleDateChange('prev')}
-            className="rounded-lg bg-white/10 p-2 text-white transition-all hover:bg-white/20"
+            className={`rounded-lg p-2 transition-all ${
+              isDarkMode 
+                ? 'bg-white/10 text-white hover:bg-white/20' 
+                : 'bg-white shadow-md border border-gray-200 text-gray-700 hover:shadow-lg hover:bg-gray-50'
+            }`}
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
           
-          <div className="flex items-center gap-3 rounded-lg bg-white/10 px-6 py-3 backdrop-blur-sm">
-            <Calendar className="h-5 w-5 text-blue-200" />
+          <div className={`flex items-center gap-3 rounded-lg px-6 py-3 backdrop-blur-sm ${
+            isDarkMode 
+              ? 'bg-white/10' 
+              : 'bg-white shadow-md border border-gray-200'
+          }`}>
+            <Calendar className={`h-5 w-5 ${isDarkMode ? 'text-blue-200' : 'text-gray-600'}`} />
             <input
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="bg-transparent text-white focus:outline-none"
+              className={`bg-transparent focus:outline-none ${isDarkMode ? 'text-white' : 'text-gray-900'}`}
             />
           </div>
           
           <button
             onClick={() => handleDateChange('next')}
             disabled={selectedDate >= new Date().toISOString().split('T')[0]}
-            className="rounded-lg bg-white/10 p-2 text-white transition-all hover:bg-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            className={`rounded-lg p-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+              isDarkMode 
+                ? 'bg-white/10 text-white hover:bg-white/20' 
+                : 'bg-white shadow-md border border-gray-200 text-gray-700 hover:shadow-lg hover:bg-gray-50'
+            }`}
           >
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
 
         {loading ? (
-          <div className="text-center text-white">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-white border-t-transparent"></div>
+          <div className={`text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+            <div className={`inline-block h-8 w-8 animate-spin rounded-full border-4 border-t-transparent ${
+              isDarkMode ? 'border-white' : 'border-gray-900'
+            }`}></div>
             <p className="mt-2">加载中...</p>
           </div>
         ) : dailyDigest ? (
           <div className="space-y-8">
             {/* Date Header */}
             <div className="text-center">
-              <h2 className="text-2xl font-bold text-white">
+              <h2 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                 {formatDate(selectedDate)}
               </h2>
             </div>
 
             {/* Statistics */}
-            <div className="rounded-lg bg-white/10 p-6 backdrop-blur-sm">
-              <div className="mb-6 flex items-center gap-2 text-white">
+            <div className={`rounded-lg p-6 backdrop-blur-sm ${
+              isDarkMode 
+                ? 'bg-white/10' 
+                : 'bg-white shadow-lg border border-gray-200'
+            }`}>
+              <div className={`mb-6 flex items-center gap-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                 <TrendingUp className="h-5 w-5" />
                 <span className="text-xl font-semibold">今日统计</span>
               </div>
               
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-                <div className="rounded-lg bg-blue-600 p-4 text-center">
+                <div className={`rounded-lg p-4 text-center ${
+                  isDarkMode ? 'bg-blue-600' : 'bg-blue-500'
+                }`}>
                   <div className="text-2xl font-bold text-white">{dailyDigest.totalNews}</div>
-                  <div className="text-blue-100">总计资讯</div>
+                  <div className={isDarkMode ? 'text-blue-100' : 'text-blue-100'}>总计资讯</div>
                 </div>
                 
                 {Object.entries(dailyDigest.categories).map(([category, count]) => (
-                  <div key={category} className="rounded-lg bg-white/20 p-4 text-center">
-                    <div className="text-2xl font-bold text-white">{count}</div>
-                    <div className="text-blue-200">{categoryNames[category as keyof typeof categoryNames]}</div>
+                  <div key={category} className={`rounded-lg p-4 text-center ${
+                    isDarkMode 
+                      ? 'bg-white/20' 
+                      : 'bg-gray-100 border border-gray-200'
+                  }`}>
+                    <div className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{count}</div>
+                    <div className={`${isDarkMode ? 'text-blue-200' : 'text-gray-600'}`}>{categoryNames[category as keyof typeof categoryNames]}</div>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Highlights */}
-            <div className="rounded-lg bg-white/10 p-6 backdrop-blur-sm">
-              <div className="mb-6 flex items-center gap-2 text-white">
+            <div className={`rounded-lg p-6 backdrop-blur-sm ${
+              isDarkMode 
+                ? 'bg-white/10' 
+                : 'bg-white shadow-lg border border-gray-200'
+            }`}>
+              <div className={`mb-6 flex items-center gap-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                 <FileText className="h-5 w-5" />
                 <span className="text-xl font-semibold">今日要闻</span>
               </div>
@@ -200,23 +230,33 @@ const Daily: React.FC = () => {
                 {dailyDigest.highlights.map((highlight, index) => (
                   <div
                     key={highlight.id}
-                    className="rounded-lg bg-white/10 p-4 transition-all hover:bg-white/20"
+                    className={`rounded-lg p-4 transition-all ${
+                      isDarkMode 
+                        ? 'bg-white/10 hover:bg-white/20' 
+                        : 'bg-gray-50 border border-gray-200 hover:bg-gray-100 hover:shadow-md'
+                    }`}
                   >
                     <div className="mb-2 flex items-center gap-2">
-                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-sm font-bold text-white">
+                      <span className={`flex h-6 w-6 items-center justify-center rounded-full text-sm font-bold text-white ${
+                        isDarkMode ? 'bg-blue-600' : 'bg-blue-500'
+                      }`}>
                         {index + 1}
                       </span>
-                      <span className="rounded bg-blue-600 px-2 py-1 text-xs text-white">
+                      <span className={`rounded px-2 py-1 text-xs ${
+                        isDarkMode 
+                          ? 'bg-blue-600 text-white' 
+                          : 'bg-blue-100 text-blue-800'
+                      }`}>
                         {categoryNames[highlight.category as keyof typeof categoryNames]}
                       </span>
-                      <span className="text-sm text-blue-200">{highlight.publisher}</span>
+                      <span className={`text-sm ${isDarkMode ? 'text-blue-200' : 'text-gray-600'}`}>{highlight.publisher}</span>
                     </div>
                     
-                    <h3 className="mb-2 text-lg font-semibold text-white">
+                    <h3 className={`mb-2 text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                       {highlight.title}
                     </h3>
                     
-                    <p className="mb-3 text-blue-200">
+                    <p className={`mb-3 ${isDarkMode ? 'text-blue-200' : 'text-gray-600'}`}>
                       {highlight.summary}
                     </p>
                     
@@ -229,7 +269,11 @@ const Daily: React.FC = () => {
                             newsTitle: highlight.title
                           });
                         }}
-                        className="rounded bg-green-600 px-3 py-1 text-sm text-white transition-all hover:bg-green-700"
+                        className={`rounded px-3 py-1 text-sm transition-all ${
+                          isDarkMode 
+                            ? 'bg-green-600 text-white hover:bg-green-700' 
+                            : 'bg-green-500 text-white hover:bg-green-600'
+                        }`}
                       >
                         AI解读
                       </button>
@@ -241,7 +285,11 @@ const Daily: React.FC = () => {
                             newsTitle: highlight.title
                           });
                         }}
-                        className="rounded bg-purple-600 px-3 py-1 text-sm text-white transition-all hover:bg-purple-700"
+                        className={`rounded px-3 py-1 text-sm transition-all ${
+                          isDarkMode 
+                            ? 'bg-purple-600 text-white hover:bg-purple-700' 
+                            : 'bg-purple-500 text-white hover:bg-purple-600'
+                        }`}
                       >
                         合规建议
                       </button>

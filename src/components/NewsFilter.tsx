@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, X } from 'lucide-react';
 import { newsAPI, FilterOptions } from '../services/api';
+import { useThemeStore } from '../stores/themeStore';
 
 interface NewsFilterProps {
   onFilterChange: (filters: {
@@ -20,6 +21,7 @@ interface NewsFilterProps {
 }
 
 const NewsFilter: React.FC<NewsFilterProps> = ({ onFilterChange, currentFilters }) => {
+  const { isDarkMode } = useThemeStore();
   const [filterOptions, setFilterOptions] = useState<FilterOptions>({
     publishers: [],
     fields: [],
@@ -76,7 +78,12 @@ const NewsFilter: React.FC<NewsFilterProps> = ({ onFilterChange, currentFilters 
   const hasActiveFilters = currentFilters.publisher || currentFilters.field || currentFilters.industry || currentFilters.search || currentFilters.category !== '全部资讯';
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 mb-6">
+    <div
+      className={`rounded-lg shadow-sm border p-4 mb-6 ${
+        isDarkMode ? '' : 'bg-white border-gray-200'
+      }`}
+      style={isDarkMode ? { background: 'var(--card-bg)', borderColor: 'var(--border-color)' } : undefined}
+    >
       {/* Search Bar */}
       <div className="relative mb-4">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -85,7 +92,11 @@ const NewsFilter: React.FC<NewsFilterProps> = ({ onFilterChange, currentFilters 
           placeholder="搜索关键词..."
           value={currentFilters.search}
           onChange={(e) => handleFilterChange('search', e.target.value)}
-          className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+          className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+            isDarkMode
+              ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400'
+              : 'border-gray-300 bg-white text-gray-900 placeholder-gray-500'
+          }`}
         />
       </div>
 
@@ -98,7 +109,9 @@ const NewsFilter: React.FC<NewsFilterProps> = ({ onFilterChange, currentFilters 
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               currentFilters.category === category
                 ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                : isDarkMode
+                  ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
             {category}
@@ -110,7 +123,11 @@ const NewsFilter: React.FC<NewsFilterProps> = ({ onFilterChange, currentFilters 
       <div className="flex items-center justify-between">
         <button
           onClick={() => setIsFilterOpen(!isFilterOpen)}
-          className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
+          className={`flex items-center gap-2 font-medium ${
+            isDarkMode
+              ? 'text-blue-400 hover:text-blue-300'
+              : 'text-blue-600 hover:text-blue-700'
+          }`}
         >
           <Filter className="w-4 h-4" />
           高级筛选
@@ -119,7 +136,11 @@ const NewsFilter: React.FC<NewsFilterProps> = ({ onFilterChange, currentFilters 
         {hasActiveFilters && (
           <button
             onClick={clearFilters}
-            className="flex items-center gap-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-sm"
+            className={`flex items-center gap-1 text-sm ${
+              isDarkMode
+                ? 'text-gray-400 hover:text-gray-200'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
           >
             <X className="w-4 h-4" />
             清除筛选
@@ -129,23 +150,31 @@ const NewsFilter: React.FC<NewsFilterProps> = ({ onFilterChange, currentFilters 
 
       {/* Advanced Filters Panel */}
       {isFilterOpen && (
-        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className={`mt-4 pt-4 border-t ${
+          isDarkMode ? 'border-gray-700' : 'border-gray-200'
+        }`}>
           {loading ? (
             <div className="text-center py-4">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="text-gray-500 dark:text-gray-400 mt-2">加载筛选选项...</p>
+              <p className={isDarkMode ? 'text-gray-400' : 'text-gray-500'} mt-2>加载筛选选项...</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Publisher Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className={`block text-sm font-medium mb-2 ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   发布机构
                 </label>
                 <select
                   value={currentFilters.publisher}
                   onChange={(e) => handleFilterChange('publisher', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                    isDarkMode
+                      ? 'border-gray-600 bg-gray-700 text-white'
+                      : 'border-gray-300 bg-white text-gray-900'
+                  }`}
                 >
                   <option value="">全部机构</option>
                   {filterOptions.publishers.map((publisher) => (
@@ -158,13 +187,19 @@ const NewsFilter: React.FC<NewsFilterProps> = ({ onFilterChange, currentFilters 
 
               {/* Field Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className={`block text-sm font-medium mb-2 ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   专业领域
                 </label>
                 <select
                   value={currentFilters.field}
                   onChange={(e) => handleFilterChange('field', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                    isDarkMode
+                      ? 'border-gray-600 bg-gray-700 text-white'
+                      : 'border-gray-300 bg-white text-gray-900'
+                  }`}
                 >
                   <option value="">全部领域</option>
                   {filterOptions.fields.map((field) => (
@@ -177,13 +212,19 @@ const NewsFilter: React.FC<NewsFilterProps> = ({ onFilterChange, currentFilters 
 
               {/* Industry Filter */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className={`block text-sm font-medium mb-2 ${
+                  isDarkMode ? 'text-gray-300' : 'text-gray-700'
+                }`}>
                   行业分类
                 </label>
                 <select
                   value={currentFilters.industry}
                   onChange={(e) => handleFilterChange('industry', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                    isDarkMode
+                      ? 'border-gray-600 bg-gray-700 text-white'
+                      : 'border-gray-300 bg-white text-gray-900'
+                  }`}
                 >
                   <option value="">全部行业</option>
                   {filterOptions.industries.map((industry) => (
