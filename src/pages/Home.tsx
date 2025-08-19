@@ -113,7 +113,7 @@ const Home: React.FC = () => {
               <div>
                 <p className={`text-xl font-bold ${
                   isDarkMode ? 'text-white' : 'text-gray-900'
-                }`}>99.87%</p>
+                }`}>99.62%</p>
                 <p className={`text-xs ${
                   isDarkMode ? 'text-gray-400' : 'text-gray-600'
                 }`}>准确率</p>
