@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Shield, Globe, Zap, Users, TrendingUp, Clock } from 'lucide-react';
+import { ArrowRight, Shield, Globe, Zap, Users, TrendingUp, Clock, ChevronDown } from 'lucide-react';
 import NewsCategories from '../components/NewsCategories';
 import LatestNews from '../components/LatestNews';
 // Removed Footer import because it's now included globally in App.tsx
@@ -253,6 +253,29 @@ const Home: React.FC = () => {
       
       {/* 最新资讯预览 */}
       <LatestNews />
+
+      {/* FAQ Section (copied from Contact) */}
+      <section className="px-6 py-16" style={{ background: 'var(--bg-secondary)' }}>
+        <div className="mx-auto max-w-5xl">
+          <h2 className={`mb-8 text-center text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>常见问题</h2>
+          <div className="space-y-4">
+            {[
+              { q: '如何开始使用Horus.AI？', a: '您可以直接访问我们的平台浏览免费内容，或联系我们的销售团队了解企业定制服务。' },
+              { q: '是否提供API接口？', a: '是的，我们为企业客户提供完整的API接口，支持数据集成和定制化开发。' },
+              { q: '数据更新频率如何？', a: '我们的数据实时更新，重要政策变化会在第一时间推送给用户。' },
+              { q: '是否支持多语言？', a: '目前主要支持中文，我们正在开发英文版本，未来会支持更多语言。' },
+            ].map((faq, idx) => (
+              <div key={idx} className={`rounded-lg p-4 backdrop-blur-sm ${isDarkMode ? 'bg-white/10' : 'bg-white shadow border border-gray-200'}`}>
+                <div className="flex items-center justify-between">
+                  <p className={`${isDarkMode ? 'text-white' : 'text-gray-900'} font-medium`}>{faq.q}</p>
+                  <ChevronDown className={`${isDarkMode ? 'text-white' : 'text-gray-600'} h-5 w-5`} />
+                </div>
+                <p className={`mt-2 text-sm ${isDarkMode ? 'text-blue-200' : 'text-gray-600'}`}>{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
     
     {/* Footer removed (now global) */}
