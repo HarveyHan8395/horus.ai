@@ -10,6 +10,8 @@ interface NavigationProps {
 const Navigation: React.FC<NavigationProps> = ({ isDarkMode = false, toggleDarkMode }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  // 新增：登录弹窗开关
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const navItems = [
     { path: '/', label: '首页' },
@@ -80,6 +82,19 @@ const Navigation: React.FC<NavigationProps> = ({ isDarkMode = false, toggleDarkM
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-4">
+            {/* Login Button */}
+            <button
+              onClick={() => setIsLoginOpen(true)}
+              className={`rounded-lg px-3 py-2 text-sm font-medium transition-all ${
+                isDarkMode 
+                  ? 'bg-white/10 text-white hover:bg-white/20' 
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
+              }`}
+              aria-label="登录（敬请期待）"
+            >
+              login
+            </button>
+
             {/* Theme Toggle */}
             {toggleDarkMode && (
               <button
@@ -146,6 +161,53 @@ const Navigation: React.FC<NavigationProps> = ({ isDarkMode = false, toggleDarkM
           </div>
         )}
       </div>
+
+      {/* Login Modal */}
+      {isLoginOpen && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50"
+          onClick={() => setIsLoginOpen(false)}
+        >
+          <div
+            className={`w-full max-w-sm rounded-lg shadow-xl ${
+              isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={`flex items-center justify-between px-4 py-3 border-b ${
+              isDarkMode ? 'border-gray-700' : 'border-gray-200'
+            }`}>
+              <h3 className="text-base font-semibold">登录</h3>
+              <button
+                onClick={() => setIsLoginOpen(false)}
+                className={`p-2 rounded-lg ${
+                  isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
+                }`}
+                aria-label="关闭登录弹窗"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="px-4 py-6">
+              <p className="text-center text-sm">敬请期待</p>
+            </div>
+            <div className={`flex justify-end gap-3 px-4 py-3 border-t ${
+              isDarkMode ? 'border-gray-700' : 'border-gray-200'
+            }`}>
+              <button
+                onClick={() => setIsLoginOpen(false)}
+                className={`px-4 py-2 rounded-lg text-sm ${
+                  isDarkMode 
+                    ? 'bg-white/10 text-white hover:bg-white/20' 
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
+              >
+                确定
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
