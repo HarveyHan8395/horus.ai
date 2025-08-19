@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, TrendingUp, AlertCircle, ExternalLink, Brain, FileText, Loader2, Building, Briefcase, Search, Globe } from 'lucide-react';
+import { Calendar, TrendingUp, AlertCircle, ExternalLink, Brain, FileText, Loader2, Building, Briefcase, Search, Globe, User } from 'lucide-react';
 import { toast } from 'sonner';
 import NewsFilter from '../components/NewsFilter';
 import { newsAPI, NewsItem, mockNewsData } from '../services/api';
@@ -7,6 +7,7 @@ import AIModal from '../components/AIModal';
 import { useThemeStore } from '../stores/themeStore';
 // import removed: using centralized newsDataManager
 import { getAllNewsData, filterNews } from '../utils/newsDataManager';
+import { agents } from '../components/ExpertAgents';
 
 const News: React.FC = () => {
   const { isDarkMode } = useThemeStore();
@@ -38,6 +39,32 @@ const News: React.FC = () => {
   const publishers = ['美国财政部', '欧盟委员会', '英国政府', '加拿大政府', '澳大利亚政府'];
   const fields = ['金融制裁', '贸易管制', '数据保护', '人工智能', '网络安全'];
   const industries = ['互联网', '高科技', '芯片', '物流港口', '汽车/电池', '能源/光伏', '制造业', '金融/保险', '消费品', '行业通用'];
+
+  // 根据新闻内容匹配对应的 Agent
+  const getAgentForNews = (newsItem: NewsItem) => {
+    const { category, field, content, title } = newsItem;
+    const searchText = `${title} ${content} ${field}`.toLowerCase();
+    
+    // 根据关键词匹配专家
+    if (searchText.includes('数据') || searchText.includes('隐私') || searchText.includes('gdpr') || category.includes('数据合规')) {
+      return agents.find(agent => agent.name === 'Ruby') || agents[2];
+    }
+    if (searchText.includes('人工智能') || searchText.includes('ai') || searchText.includes('算法') || category.includes('AI')) {
+      return agents.find(agent => agent.name === 'Urban') || agents[3];
+    }
+    if (searchText.includes('出口管制') || searchText.includes('制裁') || searchText.includes('实体清单') || category.includes('制裁')) {
+      return agents.find(agent => agent.name === 'Kevin') || agents[1];
+    }
+    if (searchText.includes('贸易') || searchText.includes('反倾销') || searchText.includes('反补贴')) {
+      return agents.find(agent => agent.name === 'Sophia') || agents[4];
+    }
+    if (searchText.includes('行业') || searchText.includes('商业') || searchText.includes('分析')) {
+      return agents.find(agent => agent.name === 'Owen') || agents[5];
+    }
+    
+    // 默认返回 Harvey（首席合规官）
+    return agents.find(agent => agent.name === 'Harvey') || agents[0];
+  };
 
   useEffect(() => {
     loadNews();
@@ -129,83 +156,93 @@ const News: React.FC = () => {
           </div>
         ) : (
           <div className="space-y-6">
-            {news.map((item) => (
-              <div
-                key={item.id}
-                className={`rounded-lg p-6 backdrop-blur-sm transition-all ${
-                  isDarkMode 
-                    ? 'bg-white/10 hover:bg-white/20' 
-                    : 'bg-white shadow-lg border border-gray-200 hover:shadow-xl'
-                }`}
-              >
-                <div className={`mb-4 flex flex-wrap items-center gap-4 text-sm ${isDarkMode ? 'text-blue-200' : 'text-gray-600'}`}>
-                  <span>{item.publishTime}</span>
-                  <span>•</span>
-                  <span>{item.publisher}</span>
-                  <span>•</span>
-
-                  <span className={`rounded px-2 py-1 text-xs ${
+            {news.map((item) => {
+              const agent = getAgentForNews(item);
+              return (
+                <div
+                  key={item.id}
+                  className={`rounded-lg p-6 backdrop-blur-sm transition-all ${
                     isDarkMode 
-                      ? 'bg-blue-600 text-white' 
-                      : 'bg-blue-100 text-blue-800'
+                      ? 'bg-white/10 hover:bg-white/20' 
+                      : 'bg-white shadow-lg border border-gray-200 hover:shadow-xl'
+                  }`}
+                >
+                  {/* Agent Info */}
+                  <div className={`mb-4 flex items-center gap-3 pb-3 border-b ${
+                    isDarkMode ? 'border-white/20' : 'border-gray-200'
                   }`}>
-                    {Array.isArray(item.industry) ? item.industry.join(', ') : item.industry}
-                  </span>
+                    <img 
+                      src={agent.imageUrl} 
+                      alt={agent.name}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <div>
+                      <div className={`font-medium text-sm ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                        {agent.name}
+                      </div>
+                      <div className={`text-xs ${isDarkMode ? 'text-blue-200' : 'text-gray-600'}`}>
+                        {agent.title}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={`mb-4 flex flex-wrap items-center gap-4 text-sm ${isDarkMode ? 'text-blue-200' : 'text-gray-600'}`}>
+                    <span>{item.publishTime}</span>
+                    <span>•</span>
+                    <span>{item.publisher}</span>
+                    <span>•</span>
+
+                    <span className={`rounded px-2 py-1 text-xs ${
+                      isDarkMode 
+                        ? 'bg-blue-600 text-white' 
+                        : 'bg-blue-100 text-blue-800'
+                    }`}>
+                      {Array.isArray(item.industry) ? item.industry.join(', ') : item.industry}
+                    </span>
+                  </div>
+                  <h3 className={`mb-3 text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                    {item.title}
+                  </h3>
+                  <p className={`mb-4 ${isDarkMode ? 'text-blue-200' : 'text-gray-600'} clamp-4`}>
+                    {item.content}
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    <a
+                      href={item.link || `#news-${item.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="rounded-lg px-4 py-2 text-sm font-medium transition-all bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105"
+                    >
+                      查看原文
+                    </a>
+                    <button
+                      onClick={() => {
+                        setAiModal({
+                          isOpen: true,
+                          type: 'interpretation',
+                          newsTitle: item.title
+                        });
+                      }}
+                      className="rounded-lg px-4 py-2 text-sm font-medium transition-all bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105"
+                    >
+                      AI解读
+                    </button>
+                    <button
+                      onClick={() => {
+                        setAiModal({
+                          isOpen: true,
+                          type: 'compliance',
+                          newsTitle: item.title
+                        });
+                      }}
+                      className="rounded-lg px-4 py-2 text-sm font-medium transition-all bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105"
+                    >
+                      合规建议
+                    </button>
+                  </div>
                 </div>
-                <h3 className={`mb-3 text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                  {item.title}
-                </h3>
-                <p className={`mb-4 ${isDarkMode ? 'text-blue-200' : 'text-gray-600'} clamp-4`}>
-                  {item.content}
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  <a
-                    href={item.link || `#news-${item.id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
-                      isDarkMode 
-                        ? 'bg-blue-600 text-white hover:bg-blue-700' 
-                        : 'bg-blue-500 text-white hover:bg-blue-600'
-                    }`}
-                  >
-                    查看原文
-                  </a>
-                  <button
-                    onClick={() => {
-                      setAiModal({
-                        isOpen: true,
-                        type: 'interpretation',
-                        newsTitle: item.title
-                      });
-                    }}
-                    className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
-                      isDarkMode 
-                        ? 'bg-green-600 text-white hover:bg-green-700' 
-                        : 'bg-green-500 text-white hover:bg-green-600'
-                    }`}
-                  >
-                    AI解读
-                  </button>
-                  <button
-                    onClick={() => {
-                      setAiModal({
-                        isOpen: true,
-                        type: 'compliance',
-                        newsTitle: item.title
-                      });
-                    }}
-                    className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
-                      isDarkMode 
-                        ? 'bg-purple-600 text-white hover:bg-purple-700' 
-                        : 'bg-purple-500 text-white hover:bg-purple-600'
-                    }`}
-                  >
-                    合规建议
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
 
             {/* Load More Button */}
             {hasMore && (
