@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Shield, Globe, Zap, Users, TrendingUp, Clock } from 'lucide-react';
 import NewsCategories from '../components/NewsCategories';
 import LatestNews from '../components/LatestNews';
-import Footer from '../components/Footer';
+// Removed Footer import because it's now included globally in App.tsx
 import ExpertAgents from '../components/ExpertAgents';
 import { useThemeStore } from '../stores/themeStore';
 
@@ -134,7 +134,7 @@ const Home: React.FC = () => {
           <p className={`mb-12 text-center text-lg ${
             isDarkMode ? 'text-gray-300' : 'text-gray-600'
           }`}>
-            我们为AI合规最人合规工作者，将信息转化为高质的战略优势。
+            我们将AI深度融入合规工作流，将信息转化为高质的战略优势。
           </p>
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             <div className={`rounded-lg p-6 text-center ${
@@ -215,7 +215,9 @@ const Home: React.FC = () => {
               }`} />
               <h3 className={`mb-2 text-xl font-semibold ${
                 isDarkMode ? 'text-white' : 'text-gray-900'
-              }`}>"千企千面"定制</h3>
+              }`}>
+                "千企千面"定制
+              </h3>
               <p className={`${
                  isDarkMode ? 'text-gray-300' : 'text-gray-600'
                }`}>
@@ -253,8 +255,7 @@ const Home: React.FC = () => {
       <LatestNews />
     </div>
     
-    {/* Footer */}
-    <Footer />
+    {/* Footer removed (now global) */}
     </>
   );
 };

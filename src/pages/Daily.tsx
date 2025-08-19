@@ -35,9 +35,9 @@ const Daily: React.FC = () => {
 
   const categoryNames = {
     'china-sanctions': '中国管制/制裁',
-    'foreign-sanctions': '外国制裁',
-    'data-ai': '数据合规/AI',
-    'foreign-media': '外媒报道'
+    'foreign-sanctions': '外国管制/制裁',
+    'data-ai': '数据合规/AI资讯',
+    'foreign-media': '外国媒体报道'
   };
 
   useEffect(() => {

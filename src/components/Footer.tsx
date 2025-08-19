@@ -37,7 +37,7 @@ const Footer: React.FC = () => {
                 <a href="mailto:contact@horus-ai.com" className={`transition-colors ${
                   isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'
                 }`}>
-                  contact@horus-ai.com
+                  contact@harveyhan.cn
                 </a>
               </div>
               <div className={`flex items-center gap-3 text-sm ${
@@ -47,14 +47,14 @@ const Footer: React.FC = () => {
                 <a href="tel:+861088887777" className={`transition-colors ${
                   isDarkMode ? 'hover:text-white' : 'hover:text-gray-900'
                 }`}>
-                  +86 10 8888 7777
+                  +86 186 1295 8395
                 </a>
               </div>
               <div className={`flex items-center gap-3 text-sm ${
                 isDarkMode ? 'text-gray-300' : 'text-gray-600'
               }`}>
                 <MapPin className="h-4 w-4 text-blue-500" />
-                <span>北京市朝阳区建国路88号</span>
+                <span>北京市朝阳区朝阳门南大街10号</span>
               </div>
             </div>
           </div>
@@ -220,7 +220,7 @@ const Footer: React.FC = () => {
           <p className={`text-sm ${
             isDarkMode ? 'text-gray-400' : 'text-gray-500'
           }`}>
-            © 2023 Horus.AI - AI Legal RegTech. 保留所有权利。
+            © 2025 Horus.AI - AI Legal RegTech. 保留所有权利。
           </p>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const agents = [
+export const agents = [
   {
     name: 'Harvey',
     title: '首席合规官/团队负责人',

@@ -8,6 +8,7 @@ import Podcast from "@/pages/Podcast";
 import Enterprise from "@/pages/Enterprise";
 import Contact from "@/pages/Contact";
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { Toaster } from "sonner";
 import { useThemeStore } from "@/stores/themeStore";
 
@@ -25,17 +26,21 @@ export default function App() {
 
   return (
     <Router>
-      <div className="min-h-screen" style={{ background: 'var(--bg-primary)' }}>
+      <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg-primary)' }}>
         <Navigation isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/daily" element={<Daily />} />
-          <Route path="/weekly" element={<Weekly />} />
-          <Route path="/podcast" element={<Podcast />} />
-          <Route path="/enterprise" element={<Enterprise />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
+        {/* Main content area grows to push footer to bottom */}
+        <div className="flex-1">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/daily" element={<Daily />} />
+            <Route path="/weekly" element={<Weekly />} />
+            <Route path="/podcast" element={<Podcast />} />
+            <Route path="/enterprise" element={<Enterprise />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </div>
+        <Footer />
         <Toaster position="top-right" richColors />
       </div>
     </Router>

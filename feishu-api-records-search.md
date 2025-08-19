@@ -11,7 +11,7 @@
 ### **2. 认证与请求头**
 - **请求头必填参数**：
   - `Authorization`：格式为 `Bearer <access_token>`，使用`tenant_access_token`（以应用身份调用，示例：`Bearer t-g1044qeGEDXTB6NDJOGV4JQCYDGHRBARFTGT1234`）。
-    - "tenant_access_token":"t-g1048e33CDMX6PAVPZWS76F4LIWDEUGHY6H33IN6"
+    - "tenant_access_token":"t-g1048j0N22MJ2IR5JG53C6BRBRHJOHYRQLROLLBQ"
   - `Content-Type`：固定值 `application/json; charset=utf-8`。
 
 

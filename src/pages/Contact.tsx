@@ -79,9 +79,9 @@ const Contact: React.FC = () => {
         {/* Contact Cards */}
         <div className="mb-12 grid gap-6 md:grid-cols-3">
           {[
-            { icon: Mail, title: '邮箱', content: 'support@horus.ai' },
-            { icon: Phone, title: '电话', content: '+86 010-1234-5678' },
-            { icon: MapPin, title: '地址', content: '北京市朝阳区国际科技园' }
+            { icon: Mail, title: '邮箱', content: 'contact@harveyhan.cn' },
+            { icon: Phone, title: '电话', content: '+86 186 1295 8395' },
+            { icon: MapPin, title: '地址', content: '北京市朝阳区朝阳门南大街10号' }
           ].map((item, idx) => (
             <div key={idx} className={`rounded-lg p-6 text-center backdrop-blur-sm ${isDarkMode ? 'bg-white/10' : 'bg-white shadow-lg border border-gray-200'}`}>
               <item.icon className="mx-auto mb-3 h-8 w-8 text-blue-500" />

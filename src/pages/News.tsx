@@ -5,6 +5,8 @@ import NewsFilter from '../components/NewsFilter';
 import { newsAPI, NewsItem, mockNewsData } from '../services/api';
 import AIModal from '../components/AIModal';
 import { useThemeStore } from '../stores/themeStore';
+// import removed: using centralized newsDataManager
+import { getAllNewsData, filterNews } from '../utils/newsDataManager';
 
 const News: React.FC = () => {
   const { isDarkMode } = useThemeStore();
@@ -28,58 +30,18 @@ const News: React.FC = () => {
   const categories = [
     { id: 'all', name: '全部资讯', icon: Globe },
     { id: 'china-sanctions', name: '中国管制/制裁', icon: Building },
-    { id: 'foreign-sanctions', name: '外国制裁', icon: Briefcase },
-    { id: 'data-ai', name: '数据合规/AI', icon: Search },
-    { id: 'foreign-media', name: '外媒报道', icon: Calendar }
+    { id: 'foreign-sanctions', name: '外国管制/制裁', icon: Briefcase },
+    { id: 'data-ai', name: '数据合规/AI资讯', icon: Search },
+    { id: 'foreign-media', name: '外国媒体报道', icon: Calendar }
   ];
 
   const publishers = ['美国财政部', '欧盟委员会', '英国政府', '加拿大政府', '澳大利亚政府'];
   const fields = ['金融制裁', '贸易管制', '数据保护', '人工智能', '网络安全'];
-  const industries = ['金融服务', '科技行业', '制造业', '能源行业', '行业通用'];
+  const industries = ['互联网', '高科技', '芯片', '物流港口', '汽车/电池', '能源/光伏', '制造业', '金融/保险', '消费品', '行业通用'];
 
   useEffect(() => {
-    fetchNews();
+    loadNews();
   }, [filters]);
-
-  const fetchNews = async () => {
-    setLoading(true);
-    try {
-      // TODO: Replace with actual API call
-      // Simulated data for now
-      const mockData: NewsItem[] = [
-        {
-          id: '1',
-          title: '美国财政部发布新制裁措施',
-          content: '美国财政部今日宣布对多家中国企业实施新的制裁措施...',
-          publishTime: '2024-01-15',
-          publisher: '美国财政部',
-          category: 'foreign-sanctions',
-          field: 'finance',
-          industry: '金融',
-          importance: '高',
-          region: '美国'
-        },
-        {
-          id: '2',
-          title: 'GDPR合规新要求解读',
-          content: '欧盟发布GDPR合规新要求，对数据处理提出更严格标准...',
-          publishTime: '2024-01-14',
-          publisher: '欧盟委员会',
-          category: 'data-ai',
-          field: 'data-protection',
-          industry: '科技',
-          importance: '中',
-          region: '欧盟'
-        }
-      ];
-      
-      setNews(mockData);
-    } catch (error) {
-      toast.error('获取资讯失败，请稍后重试');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleAIAnalysis = (newsId: string, type: 'interpretation' | 'compliance') => {
     const message = type === 'interpretation' ? 'AI解读功能开发中...' : '合规建议功能开发中...';
@@ -95,45 +57,40 @@ const News: React.FC = () => {
   const loadNews = async (page = 1) => {
     try {
       setLoading(true);
-      const params = {
-        category: filters.category === '全部资讯' ? undefined : filters.category,
-        publisher: filters.publisher || undefined,
-        field: filters.field || undefined,
-        industry: filters.industry || undefined,
-        page,
-        pageSize: 20
-      };
-
-      const response = await newsAPI.getNews(params);
       
-      if (response.success) {
-        if (page === 1) {
-          setNews(response.data.records);
-        } else {
-          setNews(prev => [...prev, ...response.data.records]);
-        }
-        setHasMore(response.data.hasMore);
-        setCurrentPage(page);
+      // 整合四类新闻数据并应用筛选
+      const allProcessed = getAllNewsData();
+      const filteredProcessed = filterNews(allProcessed, filters);
+
+      const allNews = filteredProcessed.map((item) => ({
+        id: item.id,
+        title: item.title,
+        content: item.content,
+        publishTime: item.publishTime,
+        publisher: item.publisher,
+        category: item.category,
+        field: item.field,
+        industry: item.industry as any,
+        importance: item.importance,
+        region: item.region,
+        link: item.link,
+      }) as NewsItem);
+
+      const pageSize = 20;
+      const paginatedNews = allNews.slice((page - 1) * pageSize, page * pageSize);
+
+      if (page === 1) {
+        setNews(paginatedNews);
+      } else {
+        setNews(prev => [...prev, ...paginatedNews]);
       }
+      
+      setHasMore(paginatedNews.length > 0 && allNews.length > page * pageSize);
+      setCurrentPage(page);
+
     } catch (error) {
       console.error('Failed to load news:', error);
-      // Use mock data as fallback
-      if (page === 1) {
-        const filteredMockData = mockNewsData.filter(item => {
-          const matchesCategory = filters.category === '全部资讯' || item.category === filters.category;
-          const matchesSearch = !filters.search || 
-            item.title.toLowerCase().includes(filters.search.toLowerCase()) ||
-            item.content.toLowerCase().includes(filters.search.toLowerCase());
-          const matchesPublisher = !filters.publisher || item.publisher === filters.publisher;
-          const matchesField = !filters.field || item.field === filters.field;
-          const matchesIndustry = !filters.industry || item.industry === filters.industry;
-          
-          return matchesCategory && matchesSearch && matchesPublisher && matchesField && matchesIndustry;
-        });
-        setNews(filteredMockData);
-        setHasMore(false);
-      }
-      toast.error('加载新闻失败，显示模拟数据');
+      toast.error('加载新闻失败');
     } finally {
       setLoading(false);
     }
@@ -192,13 +149,13 @@ const News: React.FC = () => {
                       ? 'bg-blue-600 text-white' 
                       : 'bg-blue-100 text-blue-800'
                   }`}>
-                    {item.industry}
+                    {Array.isArray(item.industry) ? item.industry.join(', ') : item.industry}
                   </span>
                 </div>
                 <h3 className={`mb-3 text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
                   {item.title}
                 </h3>
-                <p className={`mb-4 ${isDarkMode ? 'text-blue-200' : 'text-gray-600'}`}>
+                <p className={`mb-4 ${isDarkMode ? 'text-blue-200' : 'text-gray-600'} clamp-4`}>
                   {item.content}
                 </p>
                 <div className="flex flex-wrap gap-3">

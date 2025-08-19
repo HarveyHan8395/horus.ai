@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Filter, X } from 'lucide-react';
 import { newsAPI, FilterOptions } from '../services/api';
 import { useThemeStore } from '../stores/themeStore';
+import { getFilterOptions as getLocalFilterOptions } from '../utils/newsDataManager';
 
 interface NewsFilterProps {
   onFilterChange: (filters: {
@@ -41,17 +42,14 @@ const NewsFilter: React.FC<NewsFilterProps> = ({ onFilterChange, currentFilters 
       const response = await newsAPI.getFilterOptions();
       if (response.success) {
         setFilterOptions(response.data);
+        return;
       }
     } catch (error) {
       console.error('Failed to load filter options:', error);
-      // Use mock data as fallback
-      setFilterOptions({
-        publishers: ['美国商务部', '欧盟委员会', '国家网信办', '英国政府', '日本经产省'],
-        fields: ['出口管制', '数据合规', '金融制裁', '投资审查', '网络安全'],
-        industries: ['半导体', '人工智能', '数据安全', '金融科技', '新能源'],
-        categories: ['中国管制/制裁', '外国制裁', '数据合规/AI', '外媒报道']
-      });
     } finally {
+      // 无论是否异常，都尝试使用本地数据管理器生成的筛选项作为兜底
+      const localFilters = getLocalFilterOptions();
+      setFilterOptions(localFilters);
       setLoading(false);
     }
   };

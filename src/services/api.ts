@@ -125,7 +125,7 @@ export const mockNewsData: NewsItem[] = [
     publishTime: '2024-01-15T10:30:00Z',
     importance: '高',
     region: '美国',
-    category: '外国制裁',
+    category: '外国管制/制裁',
     link: 'https://example.com/news/1'
   },
   {
@@ -138,7 +138,7 @@ export const mockNewsData: NewsItem[] = [
     publishTime: '2024-01-14T14:20:00Z',
     importance: '高',
     region: '欧盟',
-    category: '数据合规/AI',
+    category: '数据合规/AI资讯',
     link: 'https://example.com/news/2'
   },
   {
@@ -160,7 +160,7 @@ export const mockFilterOptions: FilterOptions = {
   publishers: ['美国商务部', '欧盟委员会', '国家网信办', '英国政府', '日本经产省'],
   fields: ['出口管制', '数据合规', '金融制裁', '投资审查', '网络安全'],
   industries: ['半导体', '人工智能', '数据安全', '金融科技', '新能源'],
-  categories: ['中国管制/制裁', '外国制裁', '数据合规/AI', '外媒报道']
+  categories: ['中国管制/制裁', '外国管制/制裁', '数据合规/AI资讯', '外国媒体报道']
 };
 
 // Contact API (alias for newsAPI.submitContact)

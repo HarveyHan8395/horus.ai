@@ -12,15 +12,15 @@ const NewsCategories: React.FC = () => {
       description: '商务部、安管局、外交部等机构发布的最新管制措施',
       icon: <Building className="h-12 w-12" />,
       monthlyUpdates: '328',
-      agencies: '6'
+      agencies: '9'
     },
     {
       id: 'foreign-sanctions',
       title: '外国管制/制裁',
-      description: 'OFAC、BIS、DOD等国际机构发布的最新管制措施',
+      description: 'OFAC、BIS、DOD等外国组织或机构发布的最新管制措施',
       icon: <Globe className="h-12 w-12" />,
       monthlyUpdates: '512',
-      agencies: '8'
+      agencies: '35'
     },
     {
       id: 'data-compliance',
@@ -28,7 +28,7 @@ const NewsCategories: React.FC = () => {
       description: '全球数据保护、人工智能监管最新动态和政策分析',
       icon: <Database className="h-12 w-12" />,
       monthlyUpdates: '247',
-      agencies: '7'
+      agencies: '26'
     },
     {
       id: 'foreign-media',
