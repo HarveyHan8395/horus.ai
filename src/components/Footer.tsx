@@ -16,9 +16,16 @@ const Footer: React.FC = () => {
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* 品牌信息 */}
           <div className="lg:col-span-1">
-            <h3 className={`mb-4 text-xl font-bold ${
+            <h3 className={`mb-4 text-xl font-bold flex items-center gap-2 ${
               isDarkMode ? 'text-white' : 'text-gray-900'
-            }`}>Horus.AI</h3>
+            }`}>
+              <img 
+                src="https://dachenglaw.oss-cn-beijing.aliyuncs.com/2025/08/17/5MRdLh.png" 
+                alt="Horus.AI Logo" 
+                className="h-6 w-6"
+              />
+              <span>Horus.AI</span>
+            </h3>
             <p className={`mb-6 ${
               isDarkMode ? 'text-gray-300' : 'text-gray-600'
             }`}>
