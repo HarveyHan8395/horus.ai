@@ -1,5 +1,5 @@
 {
-  "fetch_time": "2025-08-18T23:34:51.724Z",
+  "fetch_time": "2025-08-19T05:47:57.680Z",
   "total_records": 100,
   "source": {
     "app_token": "Bkasbun8ua4fQ6suGjvcKGT3nre",
@@ -11,7 +11,7 @@
       "record_id": "recuUfil7isf65",
       "title": "财政部就《美国稳定币国家创新引导与建立法案》（GENIUS法案）发布征求意见通知",
       "publisher": "美国财政部",
-      "publish_date": "2025-08-17",
+      "publish_date": "2025-08-18",
       "summary": "2025年08月18日，美国财政部根据《引导和建立美国稳定币国家创新法案》（GENIUS Act）第9(a)条要求，发布公开征求意见通知。此举旨在落实拜登政府14178号行政令关于“巩固美国在数字金融技术领域领导地位”的政策目标，推动数字资产的负责任发展。  \n\n通知重点征集金融机构在侦测数字资产非法活动时采用的创新方法或技术（如应用程序接口、人工智能、数字身份验证及区块链监测工具）的反馈意见。财政部将评估相关技术的有效性、成本、隐私及网络安全风险等因素，以完善对稳定币发行机构的监管框架。  \n\n公众需在10月17日前通过联邦公报提交意见，所有反馈将发布于www.regulations.gov供公开查阅。此次意见征询是GENIUS Act与14178号行政令协同提升美国数字资产领域竞争力及国家安全的重要步骤。",
       "original_link": "https://home.treasury.gov/news/press-releases/sb0228",
       "industry_category": [
@@ -26,7 +26,7 @@
       "record_id": "recuUeGBw3ZPF6",
       "title": "美国财政部制裁臭名昭著的哥斯达黎加毒枭",
       "publisher": "美国财政部",
-      "publish_date": "2025-08-17",
+      "publish_date": "2025-08-18",
       "summary": "2025年08月18日，美国财政部外国资产控制办公室（OFAC）宣布对4名哥斯达黎加公民及2家当地实体实施制裁，指控其参与毒品走私和洗钱活动。被制裁对象包括知名毒贩Celso Manuel Gamboa Sanchez（Gamboa）、Edwin Danney Lopez Vega（Lopez）等人，其中Gamboa曾担任哥斯达黎加公安部副部长，利用职务之便向贩毒集团泄露反毒调查信息，并通过名下律师事务所（Bufete Celso Gamboa & Asociados）和足球俱乐部（Limón Black Star FC）洗钱。  \n\n此次行动基于美国与哥斯达黎加执法部门的联合调查，涉及2025年6月Lopez和Gamboa因美国引渡请求被捕的案件。制裁依据第14059号行政令，冻结相关人员和实体在美资产，并禁止美国公民与其交易。公告另提及哥斯达黎加暴力犯罪激增与贩毒集团争夺利蒙港（Moín seaport）控制权直接相关，该国2024年凶杀率创历史第二高。  \n\n美国国务院对在逃毒枭Alejandro Arias Monge（Arias）悬赏50万美元，其长期利用Gamboa提供的警方情报逃避抓捕。财政部强调将继续运用制裁手段打击威胁美国安全的跨国贩毒网络。",
       "original_link": "https://home.treasury.gov/news/press-releases/sb0227",
       "industry_category": [
@@ -38,10 +38,24 @@
       "role": "Kevin"
     },
     {
+      "record_id": "recuUh0WqNJp9x",
+      "title": "新泽西州居民因参与全球出口管制及制裁规避阴谋被判刑",
+      "publisher": "美国司法部",
+      "publish_date": "2025-08-18",
+      "summary": "2025年08月18日，美国司法部公布新泽西州居民瓦迪姆·叶尔莫连科（Vadim Yermolenko）因参与跨国逃避出口管制及制裁案，被纽约东区联邦法院判处30个月监禁，并追缴75,547美元违法所得。叶尔莫连科作为美俄双重国籍者，于2024年11月承认共谋违反《出口管制改革法》、银行欺诈及欺骗美国政府三项罪名。\n\n经查，叶尔莫连科协助莫斯科采购公司Serniya Engineering和Sertal LLC建立空壳公司及银行账户网络，通过隐匿俄罗斯政府背景，为俄军方及情报机构采购价值数百万美元的军民两用电子设备（含可用于核武器、高超音速武器的敏感部件）及军级弹药。其控制的账户流转超1,200万美元未申报资金，部分用于购买雷达、监视及军事研发设备。2012年涉案实体已被美国财政部海外资产控制办公室（OFAC）列入制裁名单。\n\n同案被告尼古拉奥斯·博戈尼科洛斯（Nikolaos Bogonikolos）与阿列克谢·布拉伊曼（Alexey Brayman）分别因电信欺诈、出口管制违规及欺骗美国政府罪获刑15个月及待判决。本案由美国商务部出口执法办公室、联邦调查局及国税局刑事调查部联合侦办，爱沙尼亚当局在拦截运往俄罗斯的狙击子弹行动中提供关键协助。",
+      "original_link": "https://www.justice.gov/opa/pr/new-jersey-resident-sentenced-role-global-export-control-and-sanctions-evasion-scheme",
+      "industry_category": [
+        "高科技",
+        "金融/保险"
+      ],
+      "relevance": "相关",
+      "role": "Kevin"
+    },
+    {
       "record_id": "recuUeAM9e7Mvg",
       "title": "禁毒相关指定及指定移除；反恐、全球马格尼茨基及涉俄指定更新",
       "publisher": "美国财政部｜海外资产控制办公室",
-      "publish_date": "2025-08-17",
+      "publish_date": "2025-08-18",
       "summary": "2025年08月18日，美国财政部海外资产控制办公室（OFAC）更新了特别指定国民名单（SDN List），涉及毒品犯罪、恐怖主义及全球马格尼茨基制裁等内容。\n\n**新增制裁对象**：  \n1. **四名哥斯达黎加公民**因涉毒品交易被列入名单，包括别称\"Diablo\"的Alejandro Arias Monge（1984年出生）、Celso Manuel Gamboa Sánchez（1976年出生）及其关联律所Bufete Celso Gamboa And Asociados（成立于1945年），以及别称\"Turesky\"的Alejandro Antonio James Wilson（1972年出生）和Edwin Danney López Vega（1977年出生）。后者关联的利蒙黑星足球俱乐部（Limon Black Star FC）亦被制裁。  \n\n**删除与修改项**：  \n1. 哥伦比亚公民Claudia Mercedes Vargas Giraldo（1964年出生）及其名下四家关联公司被移出名单。  \n2. 五家香港公司的地址信息被简化，包括Caregis Trading HK Limited（涉国防部关联）、Kohana Company Limited、Pako International Trading Limited（涉俄罗斯制裁）及Star Energy International Limited（涉能源领域）。南苏丹公民Kur Ajing Ater（1962年出生）的出生地信息由赤道几内亚修正为南苏丹。  \n\n本次更新未涉及无关行政名单变动。",
       "original_link": "https://ofac.treasury.gov/recent-actions/20250818",
       "industry_category": [
@@ -1356,20 +1370,6 @@
       ],
       "relevance": "相关",
       "role": "Sophia"
-    },
-    {
-      "record_id": "recuRX9M47kRD8",
-      "title": "众议院委员会首席成员克里希纳穆尔蒂就中共利用关键矿物实施经济胁迫向特朗普政府施压",
-      "publisher": "美国众议院｜美中战略竞争特设委员会",
-      "publish_date": "2025-07-23",
-      "summary": "2025年7月24日，美国众议院美中战略竞争特设委员会首席议员拉贾·克里希纳莫提（Raja Krishnamoorthi，民主党-伊利诺伊州）在委员会听证会前夕，分别向商务部工业与安全事务副部长杰弗里·凯斯勒（Jeffery Kessler）及国务卿马可·鲁比奥（Marco Rubio）致函，要求强化应对中国共产党（CCP）将关键矿物供应链武器化的行为。  \n\n克里希纳莫提在致凯斯勒的信中指出，中国政府在审批稀土元素（REE）出口许可时，要求美方提供包括产品设计详图在内的终端用途信息，此举涉嫌窃取美国知识产权并迫使经济让步。他强调，美国国防与科技产业不应受制于CCP的“反复无常”。  \n\n另一封信中，克里希纳莫提敦促鲁比奥加强领导“矿物安全伙伴关系”（MSP），通过多边合作构建脱离中国掌控的可持续供应链。他称，过度依赖单一国家的关键矿物将导致市场操纵、供应链中断及经济胁迫风险。  \n\n当日听证会以“团结应对：反制中国经济胁迫民主国家的策略”为主题，特邀澳大利亚前总理斯科特·莫里森（Scott Morrison）及美国前驻日大使拉姆·伊曼纽尔（Rahm Emanuel）出席，重点讨论CCP利用稀土垄断等经济工具实施胁迫的行为。克里希纳莫提重申，需通过提升国内产能、强化出口管制及深化MSP合作维护经济安全。  \n\n**背景信息**显示：中国掌控全球90%以上稀土加工产能，2025年4月进一步收紧钐、铽、钆、镝等矿物出口限制；MSP已与韩国、澳大利亚、坦桑尼亚等盟友启动30余项供应链项目。",
-      "original_link": "https://democrats-selectcommitteeontheccp.house.gov/media/press-releases/ranking-member-krishnamoorthi-presses-trump-administration-use-critical",
-      "industry_category": [
-        "高科技",
-        "制造业"
-      ],
-      "relevance": "相关",
-      "role": "Kevin"
     }
   ]
 }

@@ -41,9 +41,9 @@ const Weekly: React.FC = () => {
   };
 
   const impactColors = {
-    high: isDarkMode ? 'bg-red-600' : 'bg-red-500',
-    medium: isDarkMode ? 'bg-yellow-600' : 'bg-yellow-400',
-    low: isDarkMode ? 'bg-green-600' : 'bg-green-500'
+    high: isDarkMode ? 'bg-gradient-to-r from-rose-500 to-pink-600' : 'bg-gradient-to-r from-rose-400 to-pink-500',
+    medium: isDarkMode ? 'bg-gradient-to-r from-amber-500 to-orange-500' : 'bg-gradient-to-r from-amber-400 to-orange-400',
+    low: isDarkMode ? 'bg-gradient-to-r from-emerald-500 to-teal-500' : 'bg-gradient-to-r from-emerald-400 to-teal-400'
   };
 
   const impactLabels = {
@@ -232,15 +232,15 @@ const Weekly: React.FC = () => {
                   <div className="mb-4 flex items-start justify-between">
                     <div className="flex items-center gap-3">
                       <div className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white ${
-                        isDarkMode ? 'bg-yellow-500' : 'bg-yellow-400'
+                        isDarkMode ? 'bg-gradient-to-r from-indigo-500 to-purple-600' : 'bg-gradient-to-r from-indigo-400 to-purple-500'
                       }`}>
                         {index + 1}
                       </div>
                       <div className={`rounded px-2 py-1 text-xs text-white ${impactColors[highlight.impact]}`}>
                         {impactLabels[highlight.impact]}
                       </div>
-                      <span className={`rounded px-2 py-1 text-xs text-white ${
-                        isDarkMode ? 'bg-blue-600' : 'bg-blue-500'
+                      <span className={`rounded-lg px-3 py-1 text-xs font-medium text-white ${
+                        isDarkMode ? 'bg-gradient-to-r from-slate-600 to-slate-700' : 'bg-gradient-to-r from-slate-500 to-slate-600'
                       }`}>
                         {categoryNames[highlight.category as keyof typeof categoryNames]}
                       </span>
@@ -307,10 +307,10 @@ const Weekly: React.FC = () => {
                         {highlight.regions.map((region, regionIndex) => (
                           <span
                             key={regionIndex}
-                            className={`rounded px-2 py-1 text-xs ${
+                            className={`rounded-lg px-3 py-1 text-xs font-medium ${
                               isDarkMode
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-blue-100 text-blue-800'
+                                ? 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white'
+                                : 'bg-gradient-to-r from-cyan-50 to-blue-50 text-cyan-700 border border-cyan-200'
                             }`}
                           >
                             {region}
@@ -330,10 +330,10 @@ const Weekly: React.FC = () => {
                         {highlight.industries.map((industry, industryIndex) => (
                           <span
                             key={industryIndex}
-                            className={`rounded px-2 py-1 text-xs ${
+                            className={`rounded-lg px-3 py-1 text-xs font-medium ${
                               isDarkMode
-                                ? 'bg-purple-600 text-white'
-                                : 'bg-purple-100 text-purple-800'
+                                ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white'
+                                : 'bg-gradient-to-r from-violet-50 to-purple-50 text-violet-700 border border-violet-200'
                             }`}
                           >
                             {industry}
@@ -353,10 +353,10 @@ const Weekly: React.FC = () => {
                           newsTitle: highlight.title
                         });
                       }}
-                      className={`rounded px-4 py-2 text-sm transition-all ${
+                      className={`rounded-lg px-4 py-2 text-sm font-medium transition-all transform hover:scale-105 ${
                         isDarkMode
-                          ? 'bg-green-600 text-white hover:bg-green-700'
-                          : 'bg-green-500 text-white hover:bg-green-600'
+                          ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-700 hover:to-teal-700 shadow-lg'
+                          : 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-600 hover:to-teal-600 shadow-md'
                       }`}
                     >
                       AI深度解读
@@ -369,20 +369,20 @@ const Weekly: React.FC = () => {
                           newsTitle: highlight.title
                         });
                       }}
-                      className={`rounded px-4 py-2 text-sm transition-all ${
+                      className={`rounded-lg px-4 py-2 text-sm font-medium transition-all transform hover:scale-105 ${
                         isDarkMode
-                          ? 'bg-purple-600 text-white hover:bg-purple-700'
-                          : 'bg-purple-500 text-white hover:bg-purple-600'
+                          ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white hover:from-violet-700 hover:to-purple-700 shadow-lg'
+                          : 'bg-gradient-to-r from-violet-500 to-purple-500 text-white hover:from-violet-600 hover:to-purple-600 shadow-md'
                       }`}
                     >
                       合规影响分析
                     </button>
                     <button
                       onClick={() => toast.info('详情页面开发中...', { duration: 2000 })}
-                      className={`rounded px-4 py-2 text-sm transition-all ${
+                      className={`rounded-lg px-4 py-2 text-sm font-medium transition-all transform hover:scale-105 ${
                         isDarkMode
-                          ? 'bg-blue-600 text-white hover:bg-blue-700'
-                          : 'bg-blue-500 text-white hover:bg-blue-600'
+                          ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 shadow-lg'
+                          : 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white hover:from-blue-600 hover:to-indigo-600 shadow-md'
                       }`}
                     >
                       查看详情
@@ -420,15 +420,15 @@ const Weekly: React.FC = () => {
                 </div>
                 
                 <div className="grid gap-4 md:grid-cols-3">
-                  <div className={`rounded-lg p-4 text-center ${
-                    isDarkMode ? 'bg-blue-600' : 'bg-blue-500'
+                  <div className={`rounded-xl p-4 text-center shadow-lg ${
+                    isDarkMode ? 'bg-gradient-to-br from-blue-600 to-indigo-700' : 'bg-gradient-to-br from-blue-500 to-indigo-600'
                   }`}>
                     <div className="text-2xl font-bold text-white">{highlights.length}</div>
                     <div className={isDarkMode ? 'text-blue-100' : 'text-blue-100'}>重磅事件</div>
                   </div>
                   
-                  <div className={`rounded-lg p-4 text-center ${
-                    isDarkMode ? 'bg-red-600' : 'bg-red-500'
+                  <div className={`rounded-xl p-4 text-center shadow-lg ${
+                    isDarkMode ? 'bg-gradient-to-br from-rose-600 to-pink-700' : 'bg-gradient-to-br from-rose-500 to-pink-600'
                   }`}>
                     <div className="text-2xl font-bold text-white">
                       {highlights.filter(h => h.impact === 'high').length}
@@ -436,8 +436,8 @@ const Weekly: React.FC = () => {
                     <div className={isDarkMode ? 'text-red-100' : 'text-red-100'}>高影响事件</div>
                   </div>
                   
-                  <div className={`rounded-lg p-4 text-center ${
-                    isDarkMode ? 'bg-green-600' : 'bg-green-500'
+                  <div className={`rounded-xl p-4 text-center shadow-lg ${
+                    isDarkMode ? 'bg-gradient-to-br from-emerald-600 to-teal-700' : 'bg-gradient-to-br from-emerald-500 to-teal-600'
                   }`}>
                     <div className="text-2xl font-bold text-white">
                       {highlights.reduce((sum, h) => sum + h.relatedNews, 0)}
